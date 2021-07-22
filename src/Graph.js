@@ -69,6 +69,7 @@ export default class Sandbox extends React.Component {
       data,
       fullscreen,
       nodeIdToBeRemoved: null,
+      file: null,
     };
   }
 
@@ -304,6 +305,27 @@ export default class Sandbox extends React.Component {
     return Promise.resolve();
   };
 
+  onAddFile = (event) => {
+    const { files } = event.target;
+    this.setState({ file: files[0] });
+  };
+
+  onSubmitFile = async () => {
+    try {
+      const formData = new FormData();
+      formData.append('data', this.state.file);
+      const response = await fetch('http://localhost:8000/load_data', {
+        method: 'PUT',
+        body: formData,
+      });
+      const data = await response.json();
+      console.log(data);
+      this.setState({ data });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   /**
    * Update graph data each time an update is triggered
    * by JsonTree
@@ -356,7 +378,7 @@ export default class Sandbox extends React.Component {
     return (
       <div>
         {fullscreen}
-        <button
+        {/* <button
           onClick={this.restartGraphSimulation}
           className='btn btn-default btn-margin-left'
           style={btnStyle}
@@ -391,14 +413,14 @@ export default class Sandbox extends React.Component {
           className='btn btn-default btn-margin-left'
         >
           -
-        </button>
+        </button> */}
         <span className='container__graph-info'>
           {/* eslint-disable-next-line max-len */}
           <b>Nodes: </b> {this.state.data.nodes.length} |<b>Links: </b>{' '}
           {this.state.data.links.length} |<b>Zoom: </b>{' '}
           {this.state.currentZoom ? this.state.currentZoom.toFixed(3) : '-'}
         </span>
-        {!deactivateCodeSandboxLink(this.state.config) && (
+        {/* {!deactivateCodeSandboxLink(this.state.config) && (
           <a href='javascript:void(0)'>
             <img
               width='150px'
@@ -409,7 +431,22 @@ export default class Sandbox extends React.Component {
               }
             />
           </a>
-        )}
+        )} */}
+        <input
+          style={{ display: 'inline-block', marginLeft: '20px' }}
+          className='btn btn-primary'
+          name='file'
+          type='file'
+          onChange={this.onAddFile}
+        />
+        <button
+          style={{ marginLeft: '20px' }}
+          className='btn btn-primary'
+          disabled={!this.state.file}
+          onClick={this.onSubmitFile}
+        >
+          Submit data
+        </button>
       </div>
     );
   };

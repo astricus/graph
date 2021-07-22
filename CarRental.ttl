@@ -1,0 +1,200 @@
+@prefix : <https://example.com#> .
+@prefix gufo: <http://purl.org/nemo/gufo#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://example.com> rdf:type owl:Ontology ;
+    owl:imports gufo: .
+:Person rdf:type owl:Class, gufo:Kind, owl:NamedIndividual ;
+    rdfs:subClassOf gufo:FunctionalComplex ;
+    rdfs:label "Person"@en .
+:Man rdf:type owl:Class, gufo:SubKind, owl:NamedIndividual ;
+    rdfs:label "Man"@en .
+:Woman rdf:type owl:Class, gufo:SubKind, owl:NamedIndividual ;
+    rdfs:label "Woman"@en .
+:DeceasedPerson rdf:type owl:Class, gufo:Phase, owl:NamedIndividual ;
+    rdfs:label "DeceasedPerson"@en .
+:LivingPerson rdf:type owl:Class, gufo:Phase, owl:NamedIndividual ;
+    rdfs:label "LivingPerson"@en .
+:Husband rdf:type owl:Class, gufo:Role, owl:NamedIndividual ;
+    rdfs:label "Husband"@en .
+:Wife rdf:type owl:Class, gufo:Role, owl:NamedIndividual ;
+    rdfs:label "Wife"@en .
+:Marriage rdf:type owl:Class, gufo:Kind, owl:NamedIndividual ;
+    rdfs:subClassOf gufo:Relator ;
+    rdfs:label "Marriage"@en .
+:Teenager rdf:type owl:Class, gufo:Phase, owl:NamedIndividual ;
+    rdfs:label "Teenager"@en .
+:Adult rdf:type owl:Class, gufo:Phase, owl:NamedIndividual ;
+    rdfs:label "Adult"@en .
+:PersonalCustomer rdf:type owl:Class, gufo:Role, owl:NamedIndividual ;
+    rdfs:label "PersonalCustomer"@en .
+:Organization rdf:type owl:Class, gufo:Kind, owl:NamedIndividual ;
+    rdfs:subClassOf gufo:FunctionalComplex ;
+    rdfs:label "Organization"@en .
+:CarAgency rdf:type owl:Class, gufo:SubKind, owl:NamedIndividual ;
+    rdfs:label "CarAgency"@en .
+:Ownership rdf:type owl:Class, gufo:Kind, owl:NamedIndividual ;
+    rdfs:subClassOf gufo:Relator ;
+    rdfs:label "Ownership"@en .
+:Car rdf:type owl:Class, gufo:Kind, owl:NamedIndividual ;
+    rdfs:subClassOf gufo:FunctionalComplex ;
+    rdfs:label "Car"@en .
+:Customer rdf:type owl:Class, gufo:RoleMixin, owl:NamedIndividual ;
+    rdfs:subClassOf gufo:FunctionalComplex ;
+    rdfs:label "Customer"@en .
+:CarRental rdf:type owl:Class, gufo:Kind, owl:NamedIndividual ;
+    rdfs:subClassOf gufo:Relator ;
+    rdfs:label "CarRental"@en .
+:RentalCar rdf:type owl:Class, gufo:Role, owl:NamedIndividual ;
+    rdfs:label "RentalCar"@en .
+:CorporateCustomer rdf:type owl:Class, gufo:Role, owl:NamedIndividual ;
+    rdfs:label "CorporateCustomer"@en .
+:UnderMaintenanceCar rdf:type owl:Class, gufo:Phase, owl:NamedIndividual ;
+    rdfs:label "UnderMaintenanceCar"@en .
+:AvailableCar rdf:type owl:Class, gufo:Phase, owl:NamedIndividual ;
+    rdfs:label "AvailableCar"@en .
+:CEO rdf:type owl:Class, gufo:Role, owl:NamedIndividual ;
+    rdfs:label "CEO"@en .
+:Child rdf:type owl:Class, gufo:Phase, owl:NamedIndividual ;
+    rdfs:label "Child"@en .
+:Employee rdf:type owl:Class, gufo:Role, owl:NamedIndividual ;
+    rdfs:label "Employee"@en .
+:ResponsibleEmployee rdf:type owl:Class, gufo:Role, owl:NamedIndividual ;
+    rdfs:label "ResponsibleEmployee"@en .
+:Gender rdf:type owl:Class, gufo:AbstractIndividualType, owl:NamedIndividual ;
+    rdfs:subClassOf gufo:QualityValue ;
+    owl:equivalentClass [
+  rdf:type owl:Class ;
+  owl:oneOf (:Man_1 :Woman_1)
+] .
+:Man_1 rdf:type :Gender ;
+    rdf:label "[object Object]" .
+:Woman_1 rdf:type :Gender ;
+    rdf:label "[object Object]" .
+:Gender rdfs:label "Gender"@en .
+:Man rdfs:subClassOf :Person .
+:Woman rdfs:subClassOf :Person .
+:Husband rdfs:subClassOf :Man .
+:Wife rdfs:subClassOf :Woman .
+:DeceasedPerson rdfs:subClassOf :Person .
+:LivingPerson rdfs:subClassOf :Person .
+:Teenager rdfs:subClassOf :LivingPerson .
+:Adult rdfs:subClassOf :LivingPerson .
+:PersonalCustomer rdfs:subClassOf :Adult .
+:CarAgency rdfs:subClassOf :Organization .
+:AvailableCar rdfs:subClassOf :Car .
+:UnderMaintenanceCar rdfs:subClassOf :Car .
+:RentalCar rdfs:subClassOf :AvailableCar .
+:PersonalCustomer rdfs:subClassOf :Customer .
+:CorporateCustomer rdfs:subClassOf :Customer, :Organization .
+:Child rdfs:subClassOf :LivingPerson .
+:ResponsibleEmployee rdfs:subClassOf :Employee .
+:CEO rdfs:subClassOf :Employee .
+:Employee rdfs:subClassOf :Person .
+:status rdfs:domain :Person ;
+    rdf:type owl:DatatypeProperty ;
+    rdfs:subPropertyOf gufo:hasQualityValue ;
+    rdfs:label "status"@en .
+:gender rdfs:domain :Person ;
+    rdf:type owl:DatatypeProperty ;
+    rdfs:subPropertyOf gufo:hasQualityValue ;
+    rdfs:label "gender"@en .
+:age rdfs:domain :LivingPerson ;
+    rdf:type owl:DatatypeProperty ;
+    rdfs:subPropertyOf gufo:hasQualityValue ;
+    rdfs:label "age"@en .
+:married_with rdf:type owl:ObjectProperty ;
+    rdfs:domain :Husband ;
+    rdfs:range :Wife ;
+    rdfs:label "married_with"@en .
+:owns rdf:type owl:ObjectProperty ;
+    rdfs:domain :CarAgency ;
+    rdfs:range :Car ;
+    rdfs:label "owns"@en .
+:rents rdf:type owl:ObjectProperty ;
+    rdfs:domain :Customer ;
+    rdfs:range :RentalCar ;
+    rdfs:label "rents"@en .
+:Marriage rdfs:subClassOf [
+  rdf:type owl:Restriction ;
+  owl:onProperty [ owl:inverseOf gufo:mediates ] ;
+  owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+  owl:onClass :Husband
+] .
+:Husband rdfs:subClassOf [
+  rdf:type owl:Restriction ;
+  owl:onProperty gufo:mediates ;
+  owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+  owl:onClass :Marriage
+] .
+:Wife rdfs:subClassOf [
+  rdf:type owl:Restriction ;
+  owl:onProperty [ owl:inverseOf gufo:mediates ] ;
+  owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+  owl:onClass :Marriage
+] .
+:Marriage rdfs:subClassOf [
+  rdf:type owl:Restriction ;
+  owl:onProperty gufo:mediates ;
+  owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+  owl:onClass :Wife
+] .
+:Ownership rdfs:subClassOf [
+  rdf:type owl:Restriction ;
+  owl:onProperty [ owl:inverseOf gufo:mediates ] ;
+  owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+  owl:onClass :CarAgency
+] .
+:CarAgency rdfs:subClassOf [
+  rdf:type owl:Restriction ;
+  owl:onProperty gufo:mediates ;
+  owl:someValuesFrom :Ownership
+] .
+:Car rdfs:subClassOf [
+  rdf:type owl:Restriction ;
+  owl:onProperty [ owl:inverseOf gufo:mediates ] ;
+  owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+  owl:onClass :Ownership
+] .
+:Ownership rdfs:subClassOf [
+  rdf:type owl:Restriction ;
+  owl:onProperty gufo:mediates ;
+  owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+  owl:onClass :Car
+] .
+:CarRental rdfs:subClassOf [
+  rdf:type owl:Restriction ;
+  owl:onProperty [ owl:inverseOf gufo:mediates ] ;
+  owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+  owl:onClass :Customer
+] .
+:Customer rdfs:subClassOf [
+  rdf:type owl:Restriction ;
+  owl:onProperty gufo:mediates ;
+  owl:someValuesFrom :CarRental
+] .
+:RentalCar rdfs:subClassOf [
+  rdf:type owl:Restriction ;
+  owl:onProperty [ owl:inverseOf gufo:mediates ] ;
+  owl:someValuesFrom :CarRental
+] .
+:CarRental rdfs:subClassOf [
+  rdf:type owl:Restriction ;
+  owl:onProperty gufo:mediates ;
+  owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+  owl:onClass :RentalCar
+] .
+:ResponsibleEmployee rdfs:subClassOf [
+  rdf:type owl:Restriction ;
+  owl:onProperty [ owl:inverseOf gufo:mediates ] ;
+  owl:someValuesFrom :CarRental
+] .
+:CarRental rdfs:subClassOf [
+  rdf:type owl:Restriction ;
+  owl:onProperty gufo:mediates ;
+  owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+  owl:onClass :ResponsibleEmployee
+] .
