@@ -13,10 +13,6 @@ import {
   tooltipReducer,
 } from './utils';
 import { isDeepEqual, merge } from 'react-d3-graph/src/utils';
-import {
-  createCodeSandbox,
-  deactivateCodeSandboxLink,
-} from './createCodeSandbox';
 
 import 'react-toastify/dist/ReactToastify.css';
 // import './styles.css';
@@ -70,6 +66,7 @@ export default class Sandbox extends React.Component {
       fullscreen,
       nodeIdToBeRemoved: null,
       file: null,
+      link: 'http://localhost:8000/load_data',
     };
   }
 
@@ -314,12 +311,11 @@ export default class Sandbox extends React.Component {
     try {
       const formData = new FormData();
       formData.append('data', this.state.file);
-      const response = await fetch('http://localhost:8000/load_data', {
+      const response = await fetch(this.state.link, {
         method: 'PUT',
         body: formData,
       });
       const data = await response.json();
-      console.log(data);
       this.setState({ data });
     } catch (error) {
       console.error(error);
@@ -351,6 +347,10 @@ export default class Sandbox extends React.Component {
         nodes,
       },
     });
+  };
+
+  onLinkChange = (event) => {
+    this.setState({ link: event.target.value });
   };
 
   /**
@@ -447,6 +447,19 @@ export default class Sandbox extends React.Component {
         >
           Submit data
         </button>
+        <input
+          type='text'
+          class='form-control'
+          style={{
+            display: 'inline-block',
+            width: '240px',
+            marginLeft: '20px',
+            transform: 'translateY(2px)',
+          }}
+          placeholder='Link'
+          value={this.state.link}
+          onChange={this.onLinkChange}
+        ></input>
       </div>
     );
   };
