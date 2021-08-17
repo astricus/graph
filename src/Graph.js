@@ -21,7 +21,7 @@ const sandboxData = loadDataset();
 const NOT_ALLOWED_PROPERTIES = ['height', 'width'];
 const isPropertyDocumented = (k) => !NOT_ALLOWED_PROPERTIES.includes(k);
 // eslint-disable-next-line no-undef
-const reactD3GraphVersion = '2.6.0';
+// const reactD3GraphVersion = '2.6.0';
 
 /**
  * This is a sample integration of react-d3-graph, in this particular case all the rd3g config properties
@@ -66,14 +66,19 @@ export default class Sandbox extends React.Component {
       fullscreen,
       nodeIdToBeRemoved: null,
       file: null,
+      node: null,
       link: 'http://localhost:8000/load_data',
     };
   }
 
-  onClickGraph = () => toast('Clicked the graph');
+  onClickGraph = () => {
+    this.setState({ node: null });
+    // toast('Clicked the graph');
+  }
 
   onClickNode = (id, node) => {
-    toast(`Clicked node ${id} in position (${node.x}, ${node.y})`);
+    this.setState({ node });
+    // toast(`Clicked node ${id} in position (${node.x}, ${node.y})`);
     // NOTE: below sample implementation for focusAnimation when clicking on node
     // this.setState({
     //     data: {
@@ -488,6 +493,17 @@ export default class Sandbox extends React.Component {
     toast.configure();
   }
 
+  renderNodeValues = () => {
+    const { node } = this.state;
+    if (node) {
+      return Object.keys(node).map(key => (
+        <p>{key}: {node[key]}</p>
+      ))
+    } else {
+      return <p>The node is not selected</p>
+    }
+  }
+
   render() {
     // This does not happens in this sandbox scenario running time, but if we set staticGraph config
     // to true in the constructor we will provide nodes with initial positions
@@ -538,7 +554,7 @@ export default class Sandbox extends React.Component {
             </div>
           </div>
           <div className='container__form'>
-            <h4>
+            {/* <h4>
               <a
                 href='https://github.com/danielcaldas/react-d3-graph'
                 target='_blank'
@@ -548,8 +564,8 @@ export default class Sandbox extends React.Component {
                   ? `react-d3-graph@${reactD3GraphVersion}`
                   : 'react-d3-graph'}
               </a>
-            </h4>
-            <h4>
+            </h4> */}
+            {/* <h4>
               <a
                 href='https://danielcaldas.github.io/react-d3-graph/docs/index.html'
                 target='_blank'
@@ -567,9 +583,10 @@ export default class Sandbox extends React.Component {
               >
                 ⭐Become a stargazer
               </a>
-            </h5>
+            </h5> */}
             <h3>Configurations</h3>
-            <Form
+            {this.renderNodeValues()}
+            {/* <Form
               className='form-wrapper'
               schema={this.state.schema}
               uiSchema={this.state.uiSchema}
@@ -577,8 +594,8 @@ export default class Sandbox extends React.Component {
               onSubmit={this.onSubmit}
             >
               <button className='invisible-button' type='submit' />
-            </Form>
-            <button
+            </Form> */}
+            {/* <button
               className='submit-button btn btn-primary'
               onClick={this.onClickSubmit}
             >
@@ -589,7 +606,7 @@ export default class Sandbox extends React.Component {
               onClick={this.resetGraphConfig}
             >
               Reset config
-            </button>
+            </button> */}
           </div>
           <div className='container__graph-config'>
             <h4>
