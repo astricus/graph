@@ -14,7 +14,7 @@ import {
 } from './utils';
 import { isDeepEqual, merge } from 'react-d3-graph/src/utils';
 
-import 'react-toastify/dist/ReactToastify.css';
+// import 'react-toastify/dist/ReactToastify.css';
 // import './styles.css';
 
 const sandboxData = loadDataset();
@@ -135,6 +135,7 @@ export default class Sandbox extends React.Component {
       file: null,
       clicked: null,
       link: 'http://localhost:8000',
+      search: '',
     };
   }
 
@@ -406,11 +407,38 @@ export default class Sandbox extends React.Component {
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   onMinus = async () => {
     try {
       const response = await fetch(`${this.state.link}/minus`, {
+        method: 'POST',
+      });
+      const data = await response.json();
+      this.setState({ data });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  
+  onSubmitSearch = async () => {
+    try {
+      const { link, search } = this.state;
+      const response = await fetch(`${link}/unfold?concept=${search}`, {
+        method: 'POST',
+      });
+      const data = await response.json();
+      this.setState({ data });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  onSubmitExpand = async () => {
+    try {
+      const { link, search } = this.state;
+      const response = await fetch(`${link}/expand?concept=${search}`, {
         method: 'POST',
       });
       const data = await response.json();
@@ -447,9 +475,10 @@ export default class Sandbox extends React.Component {
     });
   };
 
-  onLinkChange = (event) => {
-    this.setState({ link: event.target.value });
-  };
+  onInputChange = (event) => {
+    const { name, value } = event.target;
+    this.setState({ [name]: value });
+  }
 
   /**
    * Build common piece of the interface that contains some interactions such as
@@ -465,10 +494,7 @@ export default class Sandbox extends React.Component {
         ❌
       </span>
     ) : (
-      <button
-        onClick={this.onToggleFullScreen}
-        className='btn btn-default btn-margin-left'
-      >
+      <button onClick={this.onToggleFullScreen} className='btn btn-primary'>
         Fullscreen
       </button>
     );
@@ -555,8 +581,9 @@ export default class Sandbox extends React.Component {
             transform: 'translateY(2px)',
           }}
           placeholder='Link'
+          name='link'
           value={this.state.link}
-          onChange={this.onLinkChange}
+          onChange={this.onInputChange}
         />
         <button
           style={{ marginLeft: '20px' }}
@@ -571,6 +598,34 @@ export default class Sandbox extends React.Component {
           onClick={this.onMinus}
         >
           -
+        </button>
+        <input
+          type='search'
+          class='form-control'
+          style={{
+            display: 'inline-block',
+            width: '240px',
+            marginLeft: '20px',
+            transform: 'translateY(2px)',
+          }}
+          placeholder='Search'
+          name='search'
+          value={this.state.search}
+          onChange={this.onInputChange}
+        />
+        <button
+          style={{ marginLeft: '20px' }}
+          className='btn btn-primary'
+          onClick={this.onSubmitSearch}
+        >
+          Search
+        </button>
+        <button
+          style={{ marginLeft: '20px' }}
+          className='btn btn-primary'
+          onClick={this.onSubmitExpand}
+        >
+          Expand
         </button>
       </div>
     );
@@ -602,18 +657,20 @@ export default class Sandbox extends React.Component {
 
   renderNodeValues = () => {
     const { clicked } = this.state;
+    console.log(clicked);
+    const filteredKeys = ['highlighted', 'x', 'y','vx', 'vy'];
     if (clicked) {
-      return Object.keys(clicked).flatMap((key) => {
-        if (typeof key !== 'object') {
+      return Object.keys(clicked).filter(item => !filteredKeys.includes(item)).flatMap((key) => {
+        if (typeof clicked[key] !== 'object') {
           return (
-            <p>
+            <p className='mb-1'>
               {key}: {clicked[key]}
             </p>
           );
         } else {
           if (Array.isArray(clicked[key])) {
             return (
-              <p>
+              <p className='mb-1'>
                 {key}: [<br />
                 {clicked[key].map((item, index) => (
                   <>
@@ -626,7 +683,7 @@ export default class Sandbox extends React.Component {
                 ]
               </p>
             );
-          } else return <p/>
+          } else return <p />;
         }
       });
     } else {
@@ -676,93 +733,97 @@ export default class Sandbox extends React.Component {
     } else {
       // @TODO: Only show configs that differ from default ones in "Your config" box
       return (
-        <div className='container'>
-          <div className='container__graph'>
-            {this.buildCommonInteractionsPanel()}
-            <div className='container__graph-area'>
-              <Graph ref='graph' {...graphProps} />
+        <div className='container-fluid'>
+          <div className='row'>
+            <div className='col-9'>
+              {this.buildCommonInteractionsPanel()}
+              <div className='container__graph-area'>
+                <Graph ref='graph' {...graphProps} />
+              </div>
+            </div>
+            <div className='col-3'>
+              {/* <h4>
+                <a
+                  href='https://github.com/danielcaldas/react-d3-graph'
+                  target='_blank'
+                  rel='noreferrer'
+                >
+                  {reactD3GraphVersion
+                    ? `react-d3-graph@${reactD3GraphVersion}`
+                    : 'react-d3-graph'}
+                </a>
+              </h4> */}
+              {/* <h4>
+                <a
+                  href='https://danielcaldas.github.io/react-d3-graph/docs/index.html'
+                  target='_blank'
+                  rel='noreferrer'
+                >
+                  📖Documentation
+                </a>
+              </h4>
+              <h5>
+                <a
+                  href='https://github.com/danielcaldas/react-d3-graph/stargazers'
+                  target='_blank'
+                  style={{ marginLeft: '4px' }}
+                  rel='noreferrer'
+                >
+                  ⭐Become a stargazer
+                </a>
+              </h5> */}
+              <h3>Node data</h3>
+              {this.renderNodeValues()}
+              {/* <Form
+                className='form-wrapper'
+                schema={this.state.schema}
+                uiSchema={this.state.uiSchema}
+                onChange={this.refreshGraph}
+                onSubmit={this.onSubmit}
+              >
+                <button className='invisible-button' type='submit' />
+              </Form> */}
+              {/* <button
+                className='submit-button btn btn-primary'
+                onClick={this.onClickSubmit}
+              >
+                Generate config
+              </button>
+              <button
+                className='reset-button btn btn-danger'
+                onClick={this.resetGraphConfig}
+              >
+                Reset config
+              </button> */}
             </div>
           </div>
-          <div className='container__form'>
-            {/* <h4>
-              <a
-                href='https://github.com/danielcaldas/react-d3-graph'
-                target='_blank'
-                rel='noreferrer'
-              >
-                {reactD3GraphVersion
-                  ? `react-d3-graph@${reactD3GraphVersion}`
-                  : 'react-d3-graph'}
-              </a>
-            </h4> */}
-            {/* <h4>
-              <a
-                href='https://danielcaldas.github.io/react-d3-graph/docs/index.html'
-                target='_blank'
-                rel='noreferrer'
-              >
-                📖Documentation
-              </a>
-            </h4>
-            <h5>
-              <a
-                href='https://github.com/danielcaldas/react-d3-graph/stargazers'
-                target='_blank'
-                style={{ marginLeft: '4px' }}
-                rel='noreferrer'
-              >
-                ⭐Become a stargazer
-              </a>
-            </h5> */}
-            <h3>Node data</h3>
-            {this.renderNodeValues()}
-            {/* <Form
-              className='form-wrapper'
-              schema={this.state.schema}
-              uiSchema={this.state.uiSchema}
-              onChange={this.refreshGraph}
-              onSubmit={this.onSubmit}
-            >
-              <button className='invisible-button' type='submit' />
-            </Form> */}
-            {/* <button
-              className='submit-button btn btn-primary'
-              onClick={this.onClickSubmit}
-            >
-              Generate config
-            </button>
-            <button
-              className='reset-button btn btn-danger'
-              onClick={this.resetGraphConfig}
-            >
-              Reset config
-            </button> */}
-          </div>
-          <div className='container__graph-config'>
-            <h4>
-              Your config
-              <small
-                className='btn-clipboard'
-                onClick={this.copyConfigToClipboard}
-              >
-                📋 copy to clipboard
-              </small>
-            </h4>
-            <JSONContainer
-              data={this.state.generatedConfig}
-              staticData={false}
-            />
-          </div>
-          <div className='container__graph-data'>
-            <h4>
-              Graph Data <small>(editable)</small>
-            </h4>
-            <div className='json-data-container'>
-              <JsonTree
-                data={this.state.data}
-                beforeRemoveAction={this.onBeforeRemoveGraphData}
-                onFullyUpdate={this.onGraphDataUpdate}
+          <div className='row'>
+            <div className='col-6'>
+              <h4>
+                Your config
+                <small
+                  className='btn-clipboard'
+                  onClick={this.copyConfigToClipboard}
+                >
+                  📋 copy to clipboard
+                </small>
+              </h4>
+              <JSONContainer
+                data={this.state.generatedConfig}
+                staticData={false}
               />
+            </div>
+            <div className='col-6'>
+              <h4>
+                Graph Data <small>(editable)</small>
+              </h4>
+              <div className='json-data-container'>
+                <JsonTree
+                  data={this.state.data}
+                  beforeRemoveAction={this.onBeforeRemoveGraphData}
+                  onFullyUpdate={this.onGraphDataUpdate}
+                />
+              </div>
             </div>
           </div>
           <ReactTooltip
