@@ -1,10 +1,10 @@
 /*eslint require-jsdoc: 0, valid-jsdoc: 0, no-console: 0, max-lines: 0*/
 import React from 'react';
 import { JsonTree } from 'react-editable-json-tree';
-import Form from 'react-jsonschema-form';
+// import Form from 'react-jsonschema-form';
 import ReactTooltip from 'react-tooltip';
 import { toast } from 'react-toastify';
-import defaultConfig from 'react-d3-graph/src/components/graph/graph.config';
+// import defaultConfig from 'react-d3-graph/src/components/graph/graph.config';
 import { Graph } from 'react-d3-graph';
 import {
   generateFormSchema,
@@ -20,6 +20,73 @@ import 'react-toastify/dist/ReactToastify.css';
 const sandboxData = loadDataset();
 const NOT_ALLOWED_PROPERTIES = ['height', 'width'];
 const isPropertyDocumented = (k) => !NOT_ALLOWED_PROPERTIES.includes(k);
+
+const defaultConfig = {
+  automaticRearrangeAfterDropNode: false,
+  collapsible: false,
+  directed: true,
+  focusAnimationDuration: 0.75,
+  focusZoom: 1,
+  freezeAllDragEvents: false,
+  height: 400,
+  highlightDegree: 1,
+  highlightOpacity: 1,
+  linkHighlightBehavior: false,
+  maxZoom: 8,
+  minZoom: 0.1,
+  nodeHighlightBehavior: false,
+  panAndZoom: false,
+  staticGraph: false,
+  staticGraphWithDragAndDrop: false,
+  width: 800,
+  d3: {
+    alphaTarget: 0.05,
+    gravity: -100,
+    linkLength: 100,
+    linkStrength: 1,
+    disableLinkForce: false,
+  },
+  node: {
+    color: '#d3d3d3',
+    fontColor: 'black',
+    fontSize: 8,
+    fontWeight: 'normal',
+    highlightColor: 'SAME',
+    highlightFontSize: 8,
+    highlightFontWeight: 'normal',
+    highlightStrokeColor: 'SAME',
+    highlightStrokeWidth: 'SAME',
+    labelProperty: 'label',
+    mouseCursor: 'pointer',
+    opacity: 1,
+    renderLabel: true,
+    size: 150,
+    strokeColor: 'none',
+    strokeWidth: 1.5,
+    svg: '',
+    symbolType: 'circle',
+  },
+  link: {
+    color: '#d3d3d3',
+    fontColor: 'black',
+    fontSize: 8,
+    fontWeight: 'normal',
+    highlightColor: 'SAME',
+    highlightFontSize: 8,
+    highlightFontWeight: 'normal',
+    labelProperty: 'label',
+    mouseCursor: 'pointer',
+    opacity: 1,
+    renderLabel: true,
+    semanticStrokeWidth: false,
+    strokeWidth: 1.5,
+    markerHeight: 6,
+    markerWidth: 6,
+    strokeDasharray: 0,
+    strokeDashoffset: 0,
+    strokeLinecap: 'butt',
+  },
+};
 // eslint-disable-next-line no-undef
 // const reactD3GraphVersion = '2.6.0';
 
@@ -66,18 +133,18 @@ export default class Sandbox extends React.Component {
       fullscreen,
       nodeIdToBeRemoved: null,
       file: null,
-      node: null,
-      link: 'http://localhost:8000/load_data',
+      clicked: null,
+      link: 'http://localhost:8000',
     };
   }
 
   onClickGraph = () => {
     this.setState({ node: null });
     // toast('Clicked the graph');
-  }
+  };
 
   onClickNode = (id, node) => {
-    this.setState({ node });
+    this.setState({ clicked: node });
     // toast(`Clicked node ${id} in position (${node.x}, ${node.y})`);
     // NOTE: below sample implementation for focusAnimation when clicking on node
     // this.setState({
@@ -97,8 +164,10 @@ export default class Sandbox extends React.Component {
     toast(`Right clicked node ${id} in position (${node.x}, ${node.y})`);
   };
 
-  onClickLink = (source, target) =>
-    toast(`Clicked link between ${source} and ${target}`);
+  onClickLink = (source, target) => {
+    this.setState({ clicked: { source, target } });
+    // toast(`Clicked link between ${source} and ${target}`);
+  };
 
   onRightClickLink = (event, source, target) => {
     event.preventDefault();
@@ -316,7 +385,7 @@ export default class Sandbox extends React.Component {
     try {
       const formData = new FormData();
       formData.append('data', this.state.file);
-      const response = await fetch(this.state.link, {
+      const response = await fetch(`${this.state.link}/load_data`, {
         method: 'PUT',
         body: formData,
       });
@@ -326,6 +395,30 @@ export default class Sandbox extends React.Component {
       console.error(error);
     }
   };
+
+  onPlus = async () => {
+    try {
+      const response = await fetch(`${this.state.link}/plus`, {
+        method: 'POST',
+      });
+      const data = await response.json();
+      this.setState({ data });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  onMinus = async () => {
+    try {
+      const response = await fetch(`${this.state.link}/minus`, {
+        method: 'POST',
+      });
+      const data = await response.json();
+      this.setState({ data });
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   /**
    * Update graph data each time an update is triggered
@@ -464,7 +557,21 @@ export default class Sandbox extends React.Component {
           placeholder='Link'
           value={this.state.link}
           onChange={this.onLinkChange}
-        ></input>
+        />
+        <button
+          style={{ marginLeft: '20px' }}
+          className='btn btn-primary'
+          onClick={this.onPlus}
+        >
+          +
+        </button>
+        <button
+          style={{ marginLeft: '20px' }}
+          className='btn btn-primary'
+          onClick={this.onMinus}
+        >
+          -
+        </button>
       </div>
     );
   };
@@ -494,15 +601,38 @@ export default class Sandbox extends React.Component {
   }
 
   renderNodeValues = () => {
-    const { node } = this.state;
-    if (node) {
-      return Object.keys(node).map(key => (
-        <p>{key}: {node[key]}</p>
-      ))
+    const { clicked } = this.state;
+    if (clicked) {
+      return Object.keys(clicked).flatMap((key) => {
+        if (typeof key !== 'object') {
+          return (
+            <p>
+              {key}: {clicked[key]}
+            </p>
+          );
+        } else {
+          if (Array.isArray(clicked[key])) {
+            return (
+              <p>
+                {key}: [<br />
+                {clicked[key].map((item, index) => (
+                  <>
+                    <span>
+                      {index}: {item}
+                    </span>
+                    <br />
+                  </>
+                ))}
+                ]
+              </p>
+            );
+          } else return <p/>
+        }
+      });
     } else {
-      return <p>The node is not selected</p>
+      return <p>The node is not selected</p>;
     }
-  }
+  };
 
   render() {
     // This does not happens in this sandbox scenario running time, but if we set staticGraph config
@@ -584,7 +714,7 @@ export default class Sandbox extends React.Component {
                 ⭐Become a stargazer
               </a>
             </h5> */}
-            <h3>Configurations</h3>
+            <h3>Node data</h3>
             {this.renderNodeValues()}
             {/* <Form
               className='form-wrapper'
