@@ -130,7 +130,7 @@ export default class Sandbox extends React.Component {
       schema,
       uiSchema,
       data,
-      fullscreen,
+      fullscreen: true,
       nodeIdToBeRemoved: null,
       file: null,
       clicked: null,
@@ -500,7 +500,7 @@ export default class Sandbox extends React.Component {
     );
 
     return (
-      <div>
+      <div className='mt-20'>
         {fullscreen}
         {/* <button
           onClick={this.restartGraphSimulation}
@@ -556,7 +556,7 @@ export default class Sandbox extends React.Component {
             />
           </a>
         )} */}
-        <input
+        {/* <input
           style={{ display: 'inline-block', marginLeft: '20px' }}
           className='btn btn-primary'
           name='file'
@@ -626,7 +626,7 @@ export default class Sandbox extends React.Component {
           onClick={this.onSubmitExpand}
         >
           Expand
-        </button>
+        </button> */}
       </div>
     );
   };
