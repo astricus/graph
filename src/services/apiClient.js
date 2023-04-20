@@ -1,16 +1,14 @@
 import axios from 'axios'
-import { tokenInterceptor, unauthorizedInterceptor } from './authorization'
-import i18next from 'i18next'
+// import { tokenInterceptor, unauthorizedInterceptor } from './authorization'
 
 export default class ApiClient {
   constructor (baseURL, auth = true, token) {
     this.baseURL = baseURL
     this.httpClient = axios.create({ baseURL })
-    if (auth) {
-      this.httpClient.interceptors.request.use(config => tokenInterceptor(config, token))
-    }
-    this.httpClient.interceptors.response.use(null, unauthorizedInterceptor)
-    this.httpClient.defaults.headers.common['Content-Language'] = i18next.language
+    // if (auth) {
+    //   this.httpClient.interceptors.request.use(config => tokenInterceptor(config, token))
+    // }
+    // this.httpClient.interceptors.response.use(null, unauthorizedInterceptor)
   }
 
   delete ({ endpoint, params = {}, options = {} }) {

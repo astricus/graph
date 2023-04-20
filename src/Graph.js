@@ -13,6 +13,7 @@ import {
   tooltipReducer,
 } from './utils';
 import { isDeepEqual, merge } from 'react-d3-graph/src/utils';
+import { connect } from 'react-redux';
 import { defaultConfig } from './graph.config';
 
 // import 'react-toastify/dist/ReactToastify.css';
@@ -33,7 +34,7 @@ const isPropertyDocumented = (k) => !NOT_ALLOWED_PROPERTIES.includes(k);
  * for instance to load the data and config under the `small` folder you just need to append "?data=small"
  * to the url when accessing the sandbox.
  */
-export default class Sandbox extends React.Component {
+class Sandbox extends React.Component {
   constructor(props) {
     super(props);
 
@@ -64,7 +65,10 @@ export default class Sandbox extends React.Component {
       generatedConfig: {},
       schema,
       uiSchema,
-      data,
+      data: {
+        nodes: [],
+        links: [],
+      },
       fullscreen: true,
       nodeIdToBeRemoved: null,
       file: null,
@@ -72,6 +76,16 @@ export default class Sandbox extends React.Component {
       link: 'http://localhost:8000',
       search: '',
     };
+  }
+
+  componentDidUpdate (prevProps) {
+    const { graphData } = this.props;
+    if (graphData !== prevProps.graphData) {
+      this.setState(state => ({
+        ...state,
+        data: graphData,
+      }))
+    }
   }
 
   onClickGraph = () => {
@@ -420,23 +434,23 @@ export default class Sandbox extends React.Component {
    * fullscreen, play/pause, + and - buttons.
    */
   buildCommonInteractionsPanel = () => {
-    const btnStyle = {
-      cursor: this.state.config.staticGraph ? 'not-allowed' : 'pointer',
-    };
+    // const btnStyle = {
+    //   cursor: this.state.config.staticGraph ? 'not-allowed' : 'pointer',
+    // };
 
-    const fullscreen = this.state.fullscreen ? (
-      <span className='cross-icon' onClick={this.onToggleFullScreen}>
-        ❌
-      </span>
-    ) : (
-      <button onClick={this.onToggleFullScreen} className='btn btn-primary'>
-        Fullscreen
-      </button>
-    );
+    // const fullscreen = this.state.fullscreen ? (
+    //   <span className='cross-icon' onClick={this.onToggleFullScreen}>
+    //     ❌
+    //   </span>
+    // ) : (
+    //   <button onClick={this.onToggleFullScreen} className='btn btn-primary'>
+    //     Fullscreen
+    //   </button>
+    // );
 
     return (
       <div className='mt-20'>
-        {fullscreen}
+        {/* {fullscreen} */}
         {/* <button
           onClick={this.restartGraphSimulation}
           className='btn btn-default btn-margin-left'
@@ -473,12 +487,12 @@ export default class Sandbox extends React.Component {
         >
           -
         </button> */}
-        <span className='container__graph-info'>
+        {/* <span className='container__graph-info'> */}
           {/* eslint-disable-next-line max-len */}
-          <b>Nodes: </b> {this.state.data.nodes.length} |<b>Links: </b>{' '}
+          {/* <b>Nodes: </b> {this.state.data.nodes.length} |<b>Links: </b>{' '}
           {this.state.data.links.length} |<b>Zoom: </b>{' '}
           {this.state.currentZoom ? this.state.currentZoom.toFixed(3) : '-'}
-        </span>
+        </span> */}
         {/* {!deactivateCodeSandboxLink(this.state.config) && (
           <a href='javascript:void(0)'>
             <img
@@ -772,6 +786,12 @@ export default class Sandbox extends React.Component {
     }
   }
 }
+
+const mapStateToProps = (state) => ({
+  graphData: state.data.graph,
+})
+
+export default connect(mapStateToProps)(Sandbox)
 
 class JSONContainer extends React.Component {
   shouldComponentUpdate(nextProps) {

@@ -34,20 +34,20 @@ export default function Header({
           Flowbite
         </span>
       </Navbar.Brand> */}
-      <Button color='light' size='sm' onClick={toggleOpenLeft}>
+      {/* <Button color='light' size='sm' onClick={toggleOpenLeft}>
         {openLeft ? <RxCross1 /> : <RxHamburgerMenu />}
-      </Button>
+      </Button> */}
       <Button color='light' size='sm' onClick={toggleModal}>
         <HiOutlineDownload />
         Load
       </Button>
       <div className='flex md:order-2'>
-        <Button color='light' size='sm' onClick={toggleOpenRight}>
+        {/* <Button color='light' size='sm' onClick={toggleOpenRight}>
           {openRight ? <RxCross1 /> : <RxHamburgerMenu />}
-        </Button>
+        </Button> */}
         {/* <Navbar.Toggle /> */}
       </div>
-      <Navbar.Collapse>
+      {/* <Navbar.Collapse>
         <Navbar.Link href='/navbars' active={true}>
           Home
         </Navbar.Link>
@@ -55,7 +55,7 @@ export default function Header({
         <Navbar.Link href='/navbars'>Services</Navbar.Link>
         <Navbar.Link href='/navbars'>Pricing</Navbar.Link>
         <Navbar.Link href='/navbars'>Contact</Navbar.Link>
-      </Navbar.Collapse>
+      </Navbar.Collapse> */}
     </Navbar>
   );
 }
