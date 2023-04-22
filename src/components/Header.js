@@ -34,9 +34,9 @@ export default function Header({
           Flowbite
         </span>
       </Navbar.Brand> */}
-      {/* <Button color='light' size='sm' onClick={toggleOpenLeft}>
+      <Button color='light' size='sm' onClick={toggleOpenLeft}>
         {openLeft ? <RxCross1 /> : <RxHamburgerMenu />}
-      </Button> */}
+      </Button>
       <Button color='light' size='sm' onClick={toggleModal}>
         <HiOutlineDownload />
         Load
