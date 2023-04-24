@@ -1,8 +1,8 @@
 import ApiClient from './apiClient'
 const {
-  REACT_APP_API_ENDPOINT,
+  REACT_APP_API_URL,
 } = process.env
 
-const graphApi = new ApiClient(`${REACT_APP_API_ENDPOINT}/api`, false)
+const graphApi = new ApiClient(`${REACT_APP_API_URL}`, false)
 
 export { graphApi }

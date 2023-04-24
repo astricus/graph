@@ -6,6 +6,8 @@ const initialState = {
   scale: 100,
   steps: 0,
   seeding: [],
+  pinnedNodes: null,
+  activeNodes: null,
   error: null,
 };
 
@@ -32,6 +34,16 @@ const dataReducer = (state = initialState, { type, payload }) => {
         error: payload,
         loading: false,
       };
+    case dataTypes.SET_PINNED_NODES:
+      return {
+        ...state,
+        pinnedNodes: payload,
+      }
+    case dataTypes.SET_ACTIVE_NODES:
+      return {
+        ...state,
+        activeNodes: payload,
+      }
     default:
       return state;
   }

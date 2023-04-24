@@ -3,7 +3,7 @@ import Header from '../components/Header';
 import LeftSidebar from '../components/LeftSidebar';
 import RightSidebar from '../components/RightSidebar';
 import Sandbox from '../Graph';
-import Modal from '../components/Modal';
+import LoadDataModal from '../components/LoadDataModal';
 
 export default function Homepage() {
   const [openLeft, setOpenLeft] = useState(false);
@@ -21,7 +21,7 @@ export default function Homepage() {
       />
       <LeftSidebar open={openLeft} />
       <RightSidebar open={openRight} />
-      <Modal show={show} onClose={toggleModal} />
+      <LoadDataModal show={show} onClose={toggleModal} />
       <Sandbox />
     </div>
   );

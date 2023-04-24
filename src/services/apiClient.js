@@ -29,8 +29,8 @@ export default class ApiClient {
     return this.httpClient.patch(endpoint, data, options)
   }
 
-  post ({ endpoint, data, options = {} }) {
-    return this.httpClient.post(endpoint, data, options)
+  post ({ endpoint, params, data, options = {} }) {
+    return this.httpClient.post(endpoint, data, { params })
   }
 
   put ({ endpoint, data, options = {} }) {

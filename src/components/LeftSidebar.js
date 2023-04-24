@@ -12,6 +12,8 @@ import {
 } from "react-icons/hi";
 import { HiSortAscending, HiSortDescending } from "react-icons/hi";
 import { Button, TextInput } from "flowbite-react";
+import Concepts from "./Concepts";
+import Relations from "./Relations";
 
 export default function LeftSidebar({ open }) {
   return (
@@ -48,7 +50,7 @@ export default function LeftSidebar({ open }) {
         aria-label="Sidenav"
       >
         <div className="overflow-y-auto py-5 px-3 h-full bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-          <div className="flex mb-3">
+          {/* <div className="flex mb-3">
             <b>Concepts</b>
             <Button className="ml-auto mr-2" size="sm" color="light">
               <HiSortAscending />
@@ -62,8 +64,10 @@ export default function LeftSidebar({ open }) {
             icon={HiSearch}
             placeholder="Quick search for concept"
             required={true}
-          />
-          <ul className="space-y-2">
+          /> */}
+          <Concepts />
+          <Relations />
+          {/* <ul className="space-y-2">
             <li>
               <a
                 href="#"
@@ -360,9 +364,9 @@ export default function LeftSidebar({ open }) {
                 <span className="ml-3">Help</span>
               </a>
             </li>
-          </ul>
+          </ul> */}
         </div>
-        <div className="hidden absolute bottom-0 left-0 justify-center p-4 space-x-4 w-full lg:flex bg-white dark:bg-gray-800 z-20 border-r border-gray-200 dark:border-gray-700">
+        {/* <div className="hidden absolute bottom-0 left-0 justify-center p-4 space-x-4 w-full lg:flex bg-white dark:bg-gray-800 z-20 border-r border-gray-200 dark:border-gray-700">
           <a
             href="#"
             className="inline-flex justify-center p-2 text-gray-500 rounded cursor-pointer dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
@@ -403,7 +407,7 @@ export default function LeftSidebar({ open }) {
           >
             Settings page
             <div className="tooltip-arrow" data-popper-arrow></div>
-          </div>
+          </div> */}
           {/* <button
             type='button'
             data-dropdown-toggle='language-dropdown'
@@ -449,7 +453,7 @@ export default function LeftSidebar({ open }) {
             </svg>
           </button> */}
           {/* <!-- Dropdown --> */}
-          <div
+          {/* <div
             className="hidden z-50 my-4 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700"
             id="language-dropdown"
           >
@@ -603,7 +607,7 @@ export default function LeftSidebar({ open }) {
               </li>
             </ul>
           </div>
-        </div>
+        </div> */}
       </aside>
     </div>
   );
