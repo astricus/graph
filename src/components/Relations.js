@@ -9,6 +9,7 @@ import {
   HiOutlineCursorClick,
   HiOutlineArrowLeft,
   HiOutlineArrowRight,
+  HiOutlineSwitchVertical,
 } from 'react-icons/hi';
 import { useSelector } from 'react-redux';
 import { selectNodes } from '../store/data/data.selectors';
@@ -59,11 +60,14 @@ export default function Relations() {
     <div>
       <div className='flex mb-3'>
         <b>Relations</b>
-        <Button className='ml-auto mr-2' size='sm' color='light'>
-          <HiSortAscending />
+        <Button className='ml-auto mr-2' size='xs' color='light'>
+          <HiSortAscending className='text-base' />
         </Button>
-        <Button size='sm' color='light'>
-          <HiSortDescending />
+        <Button className='mr-2' size='xs' color='light'>
+          <HiSortDescending className='text-base' />
+        </Button>
+        <Button size='xs' color='light'>
+          <HiOutlineSwitchVertical className='text-base' />
         </Button>
       </div>
       <TextInput

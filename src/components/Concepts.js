@@ -10,6 +10,7 @@ import {
   HiOutlineCursorClick,
   HiOutlineArrowLeft,
   HiOutlineArrowRight,
+  HiOutlineSwitchVertical,
 } from 'react-icons/hi';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -18,32 +19,10 @@ import {
   selectPinnedNodesMap,
 } from '../store/data/data.selectors';
 import { setActiveNodes, setPinnedNodes } from '../store/data/data.actions';
-
-export function usePagination(array = [], numPerPage = 10) {
-  const [page, setPage] = useState(1);
-  const total = Math.ceil(array.length / numPerPage) || 1;
-
-  const pageUp = () => {
-    if (page < total) {
-      setPage((currentPage) => currentPage + 1);
-    }
-  };
-
-  const pageDown = () => {
-    if (page > 1) {
-      setPage((currentPage) => currentPage - 1);
-    }
-  };
-
-  const firstIdx = (page - 1) * numPerPage;
-  const lastIdx = Math.min(page * numPerPage, array.length);
-
-  const slice = useMemo(() => {
-    return array.slice(firstIdx, lastIdx);
-  }, [array, firstIdx, lastIdx]);
-
-  return { page, total, setPage, pageUp, pageDown, slice };
-}
+import { selectConcepts } from '../store/menu/menu.selectors';
+import { setConcepts } from '../store/menu/menu.actions';
+import { usePagination } from '../hooks/usePagination';
+import { useFilters } from '../hooks/useFilters';
 
 const Concept = ({ id, name, isPinned = false, isActive = false }) => {
   const dispatch = useDispatch();
@@ -75,27 +54,25 @@ const Concept = ({ id, name, isPinned = false, isActive = false }) => {
 };
 
 export default function Concepts() {
-  const [search, setSearch] = useState('');
+  const dispatch = useDispatch();
+  const concepts = useSelector(selectConcepts);
+  const { sort, search } = concepts;
+
+  /**
+   * @param {'nameAsc' | 'nameDesc' | 'stereotype'} sort
+   */
+  const changeSort = (sort) => {
+    dispatch(setConcepts({ ...concepts, sort }));
+  };
+
   const nodes = useSelector(selectNodes);
 
   const handleChangeSearch = (event) => {
     const { value } = event.target;
-    setSearch(value);
+    dispatch(setConcepts({ ...concepts, search: value }));
   };
 
-  const filteredNodes = useMemo(() => {
-    if (!search) {
-      return nodes;
-    }
-    return nodes.length > 0
-      ? nodes.filter(
-          ({ name }) =>
-            typeof name === 'string' &&
-            typeof search === 'string' &&
-            name.trim().toLowerCase().includes(search.trim().toLowerCase())
-        )
-      : [];
-  }, [nodes, search]);
+  const filteredNodes = useFilters(nodes, concepts);
 
   const pinnedNodes = useSelector(selectPinnedNodesMap);
   const activeNodes = useSelector(selectActiveNodesMap);
@@ -129,11 +106,46 @@ export default function Concepts() {
     <div className='mb-5'>
       <div className='flex mb-3'>
         <b>Concepts</b>
-        <Button className='ml-auto mr-2' size='sm' color='light'>
-          <HiSortAscending />
+        <Button
+          outline
+          className={clsx('ml-auto mr-2 transition-colors', {
+            '!border-blue-700': sort === 'nameAsc',
+          })}
+          size='xs'
+          color='light'
+          onClick={() => changeSort('nameAsc')}
+        >
+          <HiSortAscending
+            className={clsx('text-base transition-colors', {
+              'text-blue-700': sort === 'nameAsc',
+            })}
+          />
         </Button>
-        <Button size='sm' color='light'>
-          <HiSortDescending />
+        <Button
+          outline
+          className={clsx('mr-2', { '!border-blue-700': sort === 'nameDesc' })}
+          size='xs'
+          color='light'
+          onClick={() => changeSort('nameDesc')}
+        >
+          <HiSortDescending
+            className={clsx('text-base transition-colors', {
+              'text-blue-700': sort === 'nameDesc',
+            })}
+          />
+        </Button>
+        <Button
+          outline
+          className={clsx({ '!border-blue-700': sort === 'stereotype' })}
+          size='xs'
+          color='light'
+          onClick={() => changeSort('stereotype')}
+        >
+          <HiOutlineSwitchVertical
+            className={clsx('text-base transition-colors', {
+              'text-blue-700': sort === 'stereotype',
+            })}
+          />
         </Button>
       </div>
       <TextInput
@@ -145,7 +157,7 @@ export default function Concepts() {
         onChange={handleChangeSearch}
       />
       {conceptsSlice}
-      <div className='flex w-full'>
+      <div className='flex w-full items-center'>
         <Button
           size='sm'
           className='mr-2'

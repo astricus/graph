@@ -5,7 +5,7 @@ const initialState = {
   isSettingsModalOpen: false,
   isLeftSidebarOpen: false,
   isRightSidebarOpen: false,
-  consepts: {
+  concepts: {
     search: "",
     sort: "nameAsc",
   },
