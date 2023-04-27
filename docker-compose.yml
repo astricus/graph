@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  graph-frontend:
+    container_name: graph-frontend
+    image: graph-frontend
+    restart: unless-stopped
+    env_file:
+      - .env.prod
+    environment:
+      - REACT_APP_API_URL='${REACT_APP_API_URL}'
+    build:
+      context: .
+      target: production
+    ports:
+      - '4000:80'

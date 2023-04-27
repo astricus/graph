@@ -12,7 +12,7 @@ import { loadData } from '../store/data/data.actions';
 
 export default function LoadDataModal({ show, onClose }) {
   const [file, setFile] = useState(null);
-  const [url, setUrl] = useState('');
+  const [url, setUrl] = useState('https://raw.githubusercontent.com/OntoUML/ontouml-models/master/models/abrahao2018agriculture-operations/ontology.json');
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
@@ -36,26 +36,28 @@ export default function LoadDataModal({ show, onClose }) {
   const onSubmit = async () => {
     if (url) {
       setLoading(true);
-      // const formData = new FormData();
-      // formData.append('url', url);
-      // formData.append('in_format', 'json');
-      // formData.append('out_format', 'expo');
+      const formData = new FormData();
+      formData.append('url', url);
+      formData.append('in_format', 'json');
+      formData.append('out_format', 'expo');
       const result = await dispatch(loadData({
         url
       }));
+      setLoading(false);
       if (result) {
         closeModal();
       }
     }
-    // if (file) {
+    if (file) {
       setLoading(true);
       const formData = new FormData();
       formData.append('file', file);
       const result = await dispatch(loadData(formData));
+      setLoading(false);
       if (result) {
         closeModal();
       }
-    // }
+    }
   };
 
   return (

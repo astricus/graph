@@ -12,7 +12,7 @@ if (process.env.NODE_ENV === 'development') {
     composeWithDevTools(middlewareEnhancer)
   )
 } else {
-  store = createStore(rootReducer)
+  store = createStore(rootReducer, middlewareEnhancer)
 }
 
 export default store
