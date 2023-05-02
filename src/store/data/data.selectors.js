@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-const selectDataStore = (state) => state.data;
+const selectDataStore = (state) => state.data.present;
 
 export const selectGraph = createSelector(
   [selectDataStore],

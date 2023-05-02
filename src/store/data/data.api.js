@@ -16,9 +16,9 @@ import { graphApi } from '../../services';
 // };
 
 export const loadData = async (data) => {
-  const response = await graphApi.post({
+  const response = await graphApi.upload({
     endpoint: 'load',
-    params: data,
+    data,
   });
   return response?.data || {};
 };

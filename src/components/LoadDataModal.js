@@ -40,9 +40,7 @@ export default function LoadDataModal({ show, onClose }) {
       formData.append('url', url);
       formData.append('in_format', 'json');
       formData.append('out_format', 'expo');
-      const result = await dispatch(loadData({
-        url
-      }));
+      const result = await dispatch(loadData(formData));
       setLoading(false);
       if (result) {
         closeModal();
@@ -52,6 +50,8 @@ export default function LoadDataModal({ show, onClose }) {
       setLoading(true);
       const formData = new FormData();
       formData.append('file', file);
+      formData.append('in_format', 'json');
+      formData.append('out_format', 'expo');
       const result = await dispatch(loadData(formData));
       setLoading(false);
       if (result) {

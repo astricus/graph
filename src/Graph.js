@@ -88,6 +88,16 @@ class Sandbox extends React.Component {
     }
   }
 
+  componentDidMount () {
+    const { graphData } = this.props;
+    if (graphData?.nodes?.length > 0 && graphData?.links?.length > 0) {
+      this.setState(state => ({
+        ...state,
+        data: graphData,
+      }))
+    }
+  }
+
   onClickGraph = () => {
     this.setState({ node: null });
     // toast('Clicked the graph');
@@ -600,9 +610,9 @@ class Sandbox extends React.Component {
     }
   };
 
-  componentDidMount() {
-    toast.configure();
-  }
+  // componentDidMount() {
+  //   toast.configure();
+  // }
 
   renderNodeValues = () => {
     const { clicked } = this.state;
@@ -788,7 +798,7 @@ class Sandbox extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  graphData: state.data.graph,
+  graphData: state.data.present.graph,
 })
 
 export default connect(mapStateToProps)(Sandbox)
