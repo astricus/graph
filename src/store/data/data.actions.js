@@ -1,7 +1,8 @@
 import dataTypes from './data.types';
 import { actionCreator } from '../utils';
 import * as api from './data.api'
-import { selectActiveNodesMap, selectPinnedNodesMap } from './data.selectors';
+import { saveAs } from 'file-saver';
+import { selectActiveNodesMap, selectOrigin, selectPinnedNodesMap } from './data.selectors';
 
 export const load = (formData) => async (dispatch) => {
   try {
@@ -112,4 +113,13 @@ export const setActiveNodes = (nodeId) => (dispatch, getState) => {
     activeNodes[nodeId] = !activeNodes[nodeId]
   }
   dispatch(actionCreator(dataTypes.SET_ACTIVE_NODES, { ...activeNodes }))
+}
+
+export const exportOrigin = () => (dispatch, getState) => {
+  const origin = selectOrigin(getState())
+  if (origin) {
+    const blob = new Blob([JSON.stringify(origin)], {type: "text/plain;charset=utf-8"});
+    saveAs(blob, "data.json");
+    dispatch(actionCreator(dataTypes.EXPORT_ORIGIN));
+  }
 }

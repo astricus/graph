@@ -10,6 +10,7 @@
     "clsx": "^1.2.1",
     "d3": "^5.5.0",
     "d3-drag": "^1.0.0",
+    "file-saver": "^2.0.5",
     "flowbite": "^1.6.5",
     "flowbite-react": "^0.4.3",
     "query-string": "^8.1.0",

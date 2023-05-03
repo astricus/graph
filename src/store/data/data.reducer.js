@@ -60,6 +60,8 @@ const dataReducer = (state = initialState, { type, payload }) => {
         ...state,
         activeNodes: payload,
       }
+    case dataTypes.EXPORT_ORIGIN:
+      return state;
     default:
       return state;
   }

@@ -29,6 +29,8 @@ const dataTypes = {
 
   SET_PINNED_NODES: 'SET_PINNED_NODES',
   SET_ACTIVE_NODES: 'SET_ACTIVE_NODES',
+
+  EXPORT_ORIGIN: 'EXPORT_ORIGIN',
 };
 
 export default dataTypes;

@@ -2,7 +2,9 @@ import { Button, Navbar } from 'flowbite-react';
 import cn from 'clsx';
 import { RxHamburgerMenu, RxCross1 } from 'react-icons/rx';
 import React from 'react';
-import { HiOutlineDownload } from 'react-icons/hi';
+import { HiOutlineDownload, HiOutlineUpload } from 'react-icons/hi';
+import { useDispatch } from 'react-redux';
+import { exportOrigin } from '../store/data/data.actions';
 
 export default function Header({
   openLeft,
@@ -11,6 +13,11 @@ export default function Header({
   setOpenRight,
   toggleModal,
 }) {
+  const dispatch = useDispatch();
+
+  const onClickExport = () => {
+    dispatch(exportOrigin());
+  }
   const toggleOpenLeft = () => setOpenLeft((prev) => !prev);
   const toggleOpenRight = () => setOpenRight((prev) => !prev);
   return (
@@ -40,6 +47,10 @@ export default function Header({
       <Button color='light' size='sm' onClick={toggleModal}>
         <HiOutlineDownload />
         Load
+      </Button>
+      <Button color='light' size='sm' onClick={onClickExport}>
+        <HiOutlineUpload />
+        Export
       </Button>
       <div className='flex md:order-2'>
         {/* <Button color='light' size='sm' onClick={toggleOpenRight}>
