@@ -6,13 +6,17 @@ import {
   FileInput,
   Spinner,
   TextInput,
+  Radio,
 } from 'flowbite-react';
 import { useDispatch } from 'react-redux';
-import { loadData } from '../store/data/data.actions';
+import { load } from '../store/data/data.actions';
 
 export default function LoadDataModal({ show, onClose }) {
   const [file, setFile] = useState(null);
-  const [url, setUrl] = useState('https://raw.githubusercontent.com/OntoUML/ontouml-models/master/models/abrahao2018agriculture-operations/ontology.json');
+  const [mode, setMode] = useState('url'); // or 'file'
+  const [url, setUrl] = useState(
+    'https://raw.githubusercontent.com/OntoUML/ontouml-models/master/models/abrahao2018agriculture-operations/ontology.json'
+  );
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
@@ -34,25 +38,21 @@ export default function LoadDataModal({ show, onClose }) {
   };
 
   const onSubmit = async () => {
-    if (url) {
+    if (mode === 'url' && url) {
       setLoading(true);
       const formData = new FormData();
       formData.append('url', url);
-      formData.append('in_format', 'json');
-      formData.append('out_format', 'expo');
-      const result = await dispatch(loadData(formData));
+      const result = await dispatch(load(formData));
       setLoading(false);
       if (result) {
         closeModal();
       }
     }
-    if (file) {
+    if (mode === 'file' && file) {
       setLoading(true);
       const formData = new FormData();
       formData.append('file', file);
-      formData.append('in_format', 'json');
-      formData.append('out_format', 'expo');
-      const result = await dispatch(loadData(formData));
+      const result = await dispatch(load(formData));
       setLoading(false);
       if (result) {
         closeModal();
@@ -64,34 +64,43 @@ export default function LoadDataModal({ show, onClose }) {
     <Modal dismissible show={show} onClose={onClose}>
       <Modal.Header className='p-5'>Model Load</Modal.Header>
       <Modal.Body>
-        <div id='urlUpload'>
-          <div className='mb-2 block'>
-            <Label
-              htmlFor='urlData'
-              value='Insert the url to the model json file'
+        <div id='urlUpload' className='mb-10'>
+          <div className='flex items-center gap-2 mb-2'>
+            <Radio
+              name='mode-url'
+              value='USA'
+              checked={mode === 'url'}
+              onChange={() => setMode('url')}
             />
+            <Label htmlFor='united-state'>URL to the json file</Label>
           </div>
           <TextInput
             id='urlData'
-            helperText='Json url'
+            placeholder='Paste the link to the json file here'
             value={url}
             onChange={onChangeUrl}
+            disabled={mode !== 'url'}
           />
         </div>
         <div id='fileUpload'>
-          <div className='mb-2 block'>
-            <Label htmlFor='file' value='Upload file' />
+          <div className='flex items-center gap-2 mb-2'>
+            <Radio
+              name='mode-file'
+              checked={mode === 'file'}
+              onChange={() => setMode('file')}
+            />
+            <Label htmlFor='united-state'>*.json file</Label>
           </div>
           <FileInput
             id='file'
             accept='.json'
             onChange={onChangeFile}
-            helperText='Choose json file to upload'
+            disabled={mode !== 'file'}
           />
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button outline onClick={onSubmit}>
+        <Button onClick={onSubmit}>
           {loading && (
             <Spinner className='mr-3' aria-label='Default status example' />
           )}

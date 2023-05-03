@@ -3,9 +3,8 @@ import dataTypes from './data.types';
 const initialState = {
   loading: false,
   graph: null,
-  scale: 100,
-  steps: 0,
-  seeding: [],
+  constraints: [],
+  origin: null,
   pinnedNodes: null,
   activeNodes: null,
   error: null,
@@ -13,22 +12,39 @@ const initialState = {
 
 const dataReducer = (state = initialState, { type, payload }) => {
   switch (type) {
-    case dataTypes.REQUEST_DATA_UPLOAD:
+    case dataTypes.REQUEST_LOAD:
+    case dataTypes.REQUEST_FOCUS:
+    case dataTypes.REQUEST_CLUSTER:
+    case dataTypes.REQUEST_DELETE:
+    case dataTypes.REQUEST_EXPAND:
+    case dataTypes.REQUEST_FOLD:
+    case dataTypes.REQUEST_ABSTRACT:
       return {
         ...state,
         error: null,
         loading: true,
       };
-    case dataTypes.SUCCESS_DATA_UPLOAD:
+    case dataTypes.SUCCESS_LOAD:
+    case dataTypes.SUCCESS_FOCUS:
+    case dataTypes.SUCCESS_CLUSTER:
+    case dataTypes.SUCCESS_DELETE:
+    case dataTypes.SUCCESS_EXPAND:
+    case dataTypes.SUCCESS_FOLD:
+    case dataTypes.SUCCESS_ABSTRACT:
       return {
         ...state,
         graph: payload.graph,
-        steps: payload.steps,
-        scale: payload.scale,
-        seeding: payload.seeding,
+        constraints: payload.constraints,
+        origin: payload.origin,
         loading: false,
       };
-    case dataTypes.FAILURE_DATA_UPLOAD:
+    case dataTypes.FAILURE_LOAD:
+    case dataTypes.FAILURE_FOCUS:
+    case dataTypes.FAILURE_CLUSTER:
+    case dataTypes.FAILURE_DELETE:
+    case dataTypes.FAILURE_EXPAND:
+    case dataTypes.FAILURE_FOLD:
+    case dataTypes.FAILURE_ABSTRACT:
       return {
         ...state,
         error: payload,

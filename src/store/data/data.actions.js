@@ -1,19 +1,95 @@
 import dataTypes from './data.types';
 import { actionCreator } from '../utils';
-// import data from '../../response_g.json';
 import * as api from './data.api'
 import { selectActiveNodesMap, selectPinnedNodesMap } from './data.selectors';
 
-export const loadData = (formData) => async (dispatch) => {
+export const load = (formData) => async (dispatch) => {
   try {
-    dispatch(actionCreator(dataTypes.REQUEST_DATA_UPLOAD));
-    const graphData = await api.loadData(formData)
-    // dispatch(actionCreator(dataTypes.SUCCESS_DATA_UPLOAD, data));
-    dispatch(actionCreator(dataTypes.SUCCESS_DATA_UPLOAD, graphData));
+    dispatch(actionCreator(dataTypes.REQUEST_LOAD));
+    const graphData = await api.load(formData)
+    dispatch(actionCreator(dataTypes.SUCCESS_LOAD, graphData));
     return true;
   } catch (error) {
     console.error(error);
-    dispatch(actionCreator(dataTypes.FAILURE_DATA_UPLOAD, error));
+    dispatch(actionCreator(dataTypes.FAILURE_LOAD, error));
+    return false;
+  }
+};
+
+export const focus = (data) => async (dispatch) => {
+  try {
+    dispatch(actionCreator(dataTypes.REQUEST_FOCUS));
+    const graphData = await api.focus(data)
+    dispatch(actionCreator(dataTypes.SUCCESS_FOCUS, graphData));
+    return true;
+  } catch (error) {
+    console.error(error);
+    dispatch(actionCreator(dataTypes.FAILURE_FOCUS, error));
+    return false;
+  }
+};
+
+export const cluster = (data) => async (dispatch) => {
+  try {
+    dispatch(actionCreator(dataTypes.REQUEST_CLUSTER));
+    const graphData = await api.cluster(data)
+    dispatch(actionCreator(dataTypes.SUCCESS_CLUSTER, graphData));
+    return true;
+  } catch (error) {
+    console.error(error);
+    dispatch(actionCreator(dataTypes.FAILURE_CLUSTER, error));
+    return false;
+  }
+};
+
+export const remove = (data) => async (dispatch) => {
+  try {
+    dispatch(actionCreator(dataTypes.REQUEST_DELETE));
+    const graphData = await api.remove(data)
+    dispatch(actionCreator(dataTypes.SUCCESS_DELETE, graphData));
+    return true;
+  } catch (error) {
+    console.error(error);
+    dispatch(actionCreator(dataTypes.FAILURE_DELETE, error));
+    return false;
+  }
+};
+
+export const expand = (data) => async (dispatch) => {
+  try {
+    dispatch(actionCreator(dataTypes.REQUEST_EXPAND));
+    const graphData = await api.expand(data)
+    dispatch(actionCreator(dataTypes.SUCCESS_EXPAND, graphData));
+    return true;
+  } catch (error) {
+    console.error(error);
+    dispatch(actionCreator(dataTypes.FAILURE_EXPAND, error));
+    return false;
+  }
+};
+
+export const fold = (data) => async (dispatch) => {
+  try {
+    dispatch(actionCreator(dataTypes.REQUEST_FOLD));
+    const graphData = await api.fold(data)
+    dispatch(actionCreator(dataTypes.SUCCESS_FOLD, graphData));
+    return true;
+  } catch (error) {
+    console.error(error);
+    dispatch(actionCreator(dataTypes.FAILURE_FOLD, error));
+    return false;
+  }
+};
+
+export const abstract = (data) => async (dispatch) => {
+  try {
+    dispatch(actionCreator(dataTypes.REQUEST_ABSTRACT));
+    const graphData = await api.abstract(data)
+    dispatch(actionCreator(dataTypes.SUCCESS_ABSTRACT, graphData));
+    return true;
+  } catch (error) {
+    console.error(error);
+    dispatch(actionCreator(dataTypes.FAILURE_ABSTRACT, error));
     return false;
   }
 };

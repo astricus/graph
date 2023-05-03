@@ -14,7 +14,7 @@ export const defaultConfig = {
   nodeHighlightBehavior: false,
   panAndZoom: false,
   staticGraph: false,
-  staticGraphWithDragAndDrop: false, // tricky property
+  staticGraphWithDragAndDrop: true, // tricky property
   width: 800,
   d3: {
     alphaTarget: 0.05,

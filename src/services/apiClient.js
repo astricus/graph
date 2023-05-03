@@ -30,6 +30,13 @@ export default class ApiClient {
   }
 
   post ({ endpoint, params, data, options = {} }) {
+    // middleware for graph manipulation
+    if (typeof data === 'object') {
+      data.in_format = 'json';
+      data.out_format = 'expo';
+      data.width = Math.round(0.75 * window.innerWidth);
+      data.height = Math.round(0.75 * window.innerHeight);
+    }
     return this.httpClient.post(endpoint, data, { params })
   }
 
@@ -50,6 +57,13 @@ export default class ApiClient {
   }
 
   upload ({ endpoint, data, options }) {
+    // middleware for file or url upload
+    if (data instanceof FormData) {
+      data.append('in_format', 'json');
+      data.append('out_format', 'expo');
+      data.append('width', Math.round(0.75 * window.innerWidth));
+      data.append('height', Math.round(0.75 * window.innerHeight));
+    }
     options = options || {}
 
     return this.httpClient.post(endpoint, data, {
