@@ -459,7 +459,7 @@ class Sandbox extends React.Component {
     // );
 
     return (
-      <div className='mt-20'>
+      <div className='mt-16'>
         {/* {fullscreen} */}
         {/* <button
           onClick={this.restartGraphSimulation}
