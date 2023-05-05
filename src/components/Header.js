@@ -9,8 +9,10 @@ import {
   HiOutlineUpload,
 } from 'react-icons/hi';
 import { FaUndoAlt, FaRedoAlt } from 'react-icons/fa';
-import { useDispatch } from 'react-redux';
+import { ActionCreators } from 'redux-undo';
+import { useDispatch, useSelector } from 'react-redux';
 import { exportOrigin } from '../store/data/data.actions';
+import { selectHistoryLimit } from '../store/data/data.selectors';
 
 export default function Header({
   openLeft,
@@ -20,6 +22,19 @@ export default function Header({
   toggleModal,
 }) {
   const dispatch = useDispatch();
+
+  const historyLimit = useSelector(selectHistoryLimit)
+
+  const isUndoDisabled = historyLimit === 1;
+  const isRedoDisabled = historyLimit === 10;
+
+  const onClickUndo = () => {
+    dispatch(ActionCreators.undo());
+  };
+
+  const onClickRedo = () => {
+    dispatch(ActionCreators.redo());
+  };
 
   const onClickExport = () => {
     dispatch(exportOrigin());
@@ -59,7 +74,7 @@ export default function Header({
         {openLeft ? <RxCross1 /> : <RxHamburgerMenu />}
       </Button>
       <div className='flex min-w-fit w-6/12'>
-        <Button className='mr-3' size='sm' onClick={toggleModal}>
+        <Button className='mr-3 border-0' size='sm' onClick={toggleModal}>
           <HiOutlineDownload className='mr-1 text-base' />
           Load
         </Button>
@@ -100,16 +115,22 @@ export default function Header({
         </div>
         <Button.Group>
           <Button
+            className='border-0'
             color='light'
             size='sm'
-            onClick={onClickExport}
+            title='Undo'
+            disabled={isUndoDisabled}
+            onClick={onClickUndo}
           >
             <FaUndoAlt className='text-base' />
           </Button>
           <Button
+            className='border-0'
+            title='Redo'
             color='light'
             size='sm'
-            onClick={onClickExport}
+            disabled={isRedoDisabled}
+            onClick={onClickRedo}
           >
             <FaRedoAlt className='text-base' />
           </Button>
