@@ -1,4 +1,4 @@
-import { Button, Label, Navbar, RangeSlider } from 'flowbite-react';
+import { Button, Navbar } from 'flowbite-react';
 import cn from 'clsx';
 import { RxHamburgerMenu, RxCross1 } from 'react-icons/rx';
 import React from 'react';
@@ -13,17 +13,17 @@ import { ActionCreators } from 'redux-undo';
 import { useDispatch, useSelector } from 'react-redux';
 import { abstract, exportOrigin } from '../store/data/data.actions';
 import {
-  selectHistoryLimit,
   selectIsRedoDisabled,
   selectIsUndoDisabled,
   selectOrigin,
 } from '../store/data/data.selectors';
+import Zoom from './Zoom';
 
 export default function Header({
   openLeft,
   openRight,
   setOpenLeft,
-  setOpenRight,
+  // setOpenRight,
   toggleModal,
 }) {
   const dispatch = useDispatch();
@@ -119,14 +119,7 @@ export default function Header({
           <HiOutlineInformationCircle className='mr-1 text-base' />
           About
         </Button>
-        <div className='flex flex-col items-end -translate-y-2 mr-6'>
-          <Label
-            htmlFor='zoom-range'
-            className='-mb-2 text-sm font-medium text-gray-700 dark:text-gray-200'
-            value='100%'
-          />
-          <RangeSlider className='w-56' id='zoom-range' />
-        </div>
+        <Zoom />
         <Button.Group className='mr-3'>
           <Button
             className='border-0'

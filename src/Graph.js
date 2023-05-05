@@ -202,6 +202,7 @@ class Sandbox extends React.Component {
    * @param {number} newZoom New zoom level
    */
   onZoomChange = (prevZoom, newZoom) => {
+    console.log(`Zoom changed from ${prevZoom} to ${newZoom}`);
     this.setState({ currentZoom: newZoom });
   };
 
