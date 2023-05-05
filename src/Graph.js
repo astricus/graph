@@ -16,6 +16,7 @@ import {
 import { isDeepEqual, merge } from 'react-d3-graph/src/utils';
 import { connect } from 'react-redux';
 import { defaultConfig } from './graph.config';
+import ContextMenu from './components/ContextMenu';
 
 // import 'react-toastify/dist/ReactToastify.css';
 // import './styles.css';
@@ -74,40 +75,49 @@ class Sandbox extends React.Component {
       nodeIdToBeRemoved: null,
       file: null,
       clicked: null,
+      rightClicked: null,
+      rightClickedPosition: { x: 0, y: 0 },
       link: 'http://localhost:8000',
       search: '',
     };
   }
 
-  componentDidUpdate (prevProps) {
+  componentDidUpdate(prevProps) {
     const { graphData } = this.props;
     if (graphData !== prevProps.graphData) {
       if (graphData?.nodes?.length > 0 && graphData?.links?.length > 0) {
-        this.setState(state => ({
+        this.setState((state) => ({
           ...state,
           data: graphData,
-        }))
+        }));
       } else {
-        this.setState(state => ({
+        this.setState((state) => ({
           ...state,
           data: {
             nodes: [],
             links: [],
           },
-        }))
+        }));
       }
     }
   }
 
-  componentDidMount () {
+  onLeftClick = () => this.setState({ ...this.state, rightClicked: null });
+
+  componentDidMount() {
+    document.addEventListener('click', this.onLeftClick);
     const { graphData } = this.props;
     if (graphData?.nodes?.length > 0 && graphData?.links?.length > 0) {
-      this.setState(state => ({
+      this.setState((state) => ({
         ...state,
         data: graphData,
-      }))
+      }));
     }
   }
+
+  componentWillUnmount() {
+    document.removeEventListener('click', this.onLeftClick);
+  };
 
   onClickGraph = () => {
     this.setState({ node: null });
@@ -132,7 +142,12 @@ class Sandbox extends React.Component {
 
   onRightClickNode = (event, id, node) => {
     event.preventDefault();
-    toast(`Right clicked node ${id} in position (${node.x}, ${node.y})`);
+    this.setState({
+      ...this.state,
+      rightClicked: id,
+      rightClickedPosition: { x: event.clientX, y: event.clientY },
+    });
+    // toast(`Right clicked node ${id} in position (${node.x}, ${node.y})`);
   };
 
   onClickLink = (source, target) => {
@@ -391,7 +406,6 @@ class Sandbox extends React.Component {
     }
   };
 
-  
   onSubmitSearch = async () => {
     try {
       const { link, search } = this.state;
@@ -403,7 +417,7 @@ class Sandbox extends React.Component {
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   onSubmitExpand = async () => {
     try {
@@ -416,7 +430,7 @@ class Sandbox extends React.Component {
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   /**
    * Update graph data each time an update is triggered
@@ -448,7 +462,7 @@ class Sandbox extends React.Component {
   onInputChange = (event) => {
     const { name, value } = event.target;
     this.setState({ [name]: value });
-  }
+  };
 
   /**
    * Build common piece of the interface that contains some interactions such as
@@ -509,8 +523,8 @@ class Sandbox extends React.Component {
           -
         </button> */}
         {/* <span className='container__graph-info'> */}
-          {/* eslint-disable-next-line max-len */}
-          {/* <b>Nodes: </b> {this.state.data.nodes.length} |<b>Links: </b>{' '}
+        {/* eslint-disable-next-line max-len */}
+        {/* <b>Nodes: </b> {this.state.data.nodes.length} |<b>Links: </b>{' '}
           {this.state.data.links.length} |<b>Zoom: </b>{' '}
           {this.state.currentZoom ? this.state.currentZoom.toFixed(3) : '-'}
         </span> */}
@@ -628,34 +642,36 @@ class Sandbox extends React.Component {
   renderNodeValues = () => {
     const { clicked } = this.state;
     // console.log(clicked);
-    const filteredKeys = ['highlighted', 'x', 'y','vx', 'vy'];
+    const filteredKeys = ['highlighted', 'x', 'y', 'vx', 'vy'];
     if (clicked) {
-      return Object.keys(clicked).filter(item => !filteredKeys.includes(item)).flatMap((key) => {
-        if (typeof clicked[key] !== 'object') {
-          return (
-            <p className='mb-1'>
-              {key}: {clicked[key]}
-            </p>
-          );
-        } else {
-          if (Array.isArray(clicked[key])) {
+      return Object.keys(clicked)
+        .filter((item) => !filteredKeys.includes(item))
+        .flatMap((key) => {
+          if (typeof clicked[key] !== 'object') {
             return (
               <p className='mb-1'>
-                {key}: [<br />
-                {clicked[key].map((item, index) => (
-                  <>
-                    <span>
-                      {index}: {item}
-                    </span>
-                    <br />
-                  </>
-                ))}
-                ]
+                {key}: {clicked[key]}
               </p>
             );
-          } else return <p />;
-        }
-      });
+          } else {
+            if (Array.isArray(clicked[key])) {
+              return (
+                <p className='mb-1'>
+                  {key}: [<br />
+                  {clicked[key].map((item, index) => (
+                    <>
+                      <span>
+                        {index}: {item}
+                      </span>
+                      <br />
+                    </>
+                  ))}
+                  ]
+                </p>
+              );
+            } else return <p />;
+          }
+        });
     } else {
       return <p>The node is not selected</p>;
     }
@@ -698,6 +714,11 @@ class Sandbox extends React.Component {
         <div className='mt-16'>
           {/* {this.buildCommonInteractionsPanel()} */}
           <Graph key={data.nodes[0]?.id} ref='graph' {...graphProps} />
+          <ContextMenu
+            nodeId={this.state.rightClicked}
+            x={this.state.rightClickedPosition.x}
+            y={this.state.rightClickedPosition.y}
+          />
         </div>
       );
     } else {
@@ -810,9 +831,9 @@ class Sandbox extends React.Component {
 
 const mapStateToProps = (state) => ({
   graphData: state.data.present.graph,
-})
+});
 
-export default connect(mapStateToProps)(Sandbox)
+export default connect(mapStateToProps)(Sandbox);
 
 class JSONContainer extends React.Component {
   shouldComponentUpdate(nextProps) {

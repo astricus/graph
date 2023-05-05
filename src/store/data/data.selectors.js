@@ -35,7 +35,4 @@ export const selectActiveNodesMap = createSelector(
   ({ activeNodes }) => activeNodes
 );
 
-export const selectHistoryLimit = createSelector(
-  [selectDataStore],
-  ({ limit }) => limit
-);
+export const selectHistoryLimit = (state) => state.data.limit;
