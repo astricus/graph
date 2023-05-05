@@ -11,7 +11,7 @@ import {
 import { FaUndoAlt, FaRedoAlt } from 'react-icons/fa';
 import { ActionCreators } from 'redux-undo';
 import { useDispatch, useSelector } from 'react-redux';
-import { exportOrigin } from '../store/data/data.actions';
+import { abstract, exportOrigin } from '../store/data/data.actions';
 import { selectHistoryLimit } from '../store/data/data.selectors';
 
 export default function Header({
@@ -39,8 +39,13 @@ export default function Header({
   const onClickExport = () => {
     dispatch(exportOrigin());
   };
+
+  const onClickAbstract = () => {
+    dispatch(abstract());
+  };
+
   const toggleOpenLeft = () => setOpenLeft((prev) => !prev);
-  const toggleOpenRight = () => setOpenRight((prev) => !prev);
+  // const toggleOpenRight = () => setOpenRight((prev) => !prev);
   return (
     <Navbar
       fluid={true}
@@ -113,7 +118,7 @@ export default function Header({
           />
           <RangeSlider className='w-56' id='zoom-range' />
         </div>
-        <Button.Group>
+        <Button.Group className='mr-3'>
           <Button
             className='border-0'
             color='light'
@@ -135,6 +140,9 @@ export default function Header({
             <FaRedoAlt className='text-base' />
           </Button>
         </Button.Group>
+        <Button className='border-0' size='sm' onClick={onClickAbstract}>
+          Abstract
+        </Button>
       </div>
       <div className='flex md:order-2'>
         {/* <Button color='light' size='sm' onClick={toggleOpenRight}>

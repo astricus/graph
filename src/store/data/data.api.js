@@ -122,12 +122,16 @@ export const fold = async (data) => {
 
 /**
  * Expand graph
- * @param {{ node: string, long_names?: boolean, mult_relations?: boolean, keep_relators?: boolean, origin: object }} data
+ * @param {{ long_names?: boolean, mult_relations?: boolean, keep_relators?: boolean, origin: object }} data
  * @returns {Promise<{ graph: { nodes: array, links: array }, origin: object, constraints: array }>} graph data
  */
-export const abstract = async (data) => {
+export const abstract = async (data = {}) => {
+  data = {
+    ...data,
+    abs_type: ['parthood', 'hierarchy', 'aspects'],
+  }
   const response = await graphApi.post({
-    endpoint: 'fold',
+    endpoint: 'abstract',
     data,
   });
   return response?.data || {};

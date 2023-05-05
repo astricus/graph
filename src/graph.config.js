@@ -21,7 +21,7 @@ export const defaultConfig = {
     gravity: -100,
     linkLength: 100,
     linkStrength: 1,
-    disableLinkForce: false,
+    disableLinkForce: true,
   },
   node: {
     color: '#F3F4F6',

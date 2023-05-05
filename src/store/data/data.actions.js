@@ -82,10 +82,11 @@ export const fold = (data) => async (dispatch) => {
   }
 };
 
-export const abstract = (data) => async (dispatch) => {
+export const abstract = () => async (dispatch, getState) => {
   try {
     dispatch(actionCreator(dataTypes.REQUEST_ABSTRACT));
-    const graphData = await api.abstract(data)
+    const origin = selectOrigin(getState())
+    const graphData = await api.abstract({ origin })
     dispatch(actionCreator(dataTypes.SUCCESS_ABSTRACT, graphData));
     return true;
   } catch (error) {

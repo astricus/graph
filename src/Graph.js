@@ -6,6 +6,7 @@ import ReactTooltip from 'react-tooltip';
 import { toast } from 'react-toastify';
 // import defaultConfig from 'react-d3-graph/src/components/graph/graph.config';
 import { Graph } from 'react-d3-graph';
+// import { select } from 'd3-selection';
 import {
   generateFormSchema,
   loadDataset,
@@ -81,10 +82,20 @@ class Sandbox extends React.Component {
   componentDidUpdate (prevProps) {
     const { graphData } = this.props;
     if (graphData !== prevProps.graphData) {
-      this.setState(state => ({
-        ...state,
-        data: graphData,
-      }))
+      if (graphData?.nodes?.length > 0 && graphData?.links?.length > 0) {
+        this.setState(state => ({
+          ...state,
+          data: graphData,
+        }))
+      } else {
+        this.setState(state => ({
+          ...state,
+          data: {
+            nodes: [],
+            links: [],
+          },
+        }))
+      }
     }
   }
 
@@ -616,7 +627,7 @@ class Sandbox extends React.Component {
 
   renderNodeValues = () => {
     const { clicked } = this.state;
-    console.log(clicked);
+    // console.log(clicked);
     const filteredKeys = ['highlighted', 'x', 'y','vx', 'vy'];
     if (clicked) {
       return Object.keys(clicked).filter(item => !filteredKeys.includes(item)).flatMap((key) => {
@@ -684,9 +695,9 @@ class Sandbox extends React.Component {
       });
 
       return (
-        <div>
-          {this.buildCommonInteractionsPanel()}
-          <Graph ref='graph' {...graphProps} />
+        <div className='mt-16'>
+          {/* {this.buildCommonInteractionsPanel()} */}
+          <Graph key={data.nodes[0]?.id} ref='graph' {...graphProps} />
         </div>
       );
     } else {
