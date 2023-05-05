@@ -108,7 +108,7 @@ export const expand = async (data) => {
 };
 
 /**
- * Expand graph
+ * Fold graph
  * @param {{ node: string, long_names?: boolean, mult_relations?: boolean, origin: object }} data
  * @returns graph data
  */
@@ -121,7 +121,7 @@ export const fold = async (data) => {
 };
 
 /**
- * Expand graph
+ * Abstract graph
  * @param {{ long_names?: boolean, mult_relations?: boolean, keep_relators?: boolean, origin: object }} data
  * @returns {Promise<{ graph: { nodes: array, links: array }, origin: object, constraints: array }>} graph data
  */

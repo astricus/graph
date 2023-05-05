@@ -12,7 +12,12 @@ import { FaUndoAlt, FaRedoAlt } from 'react-icons/fa';
 import { ActionCreators } from 'redux-undo';
 import { useDispatch, useSelector } from 'react-redux';
 import { abstract, exportOrigin } from '../store/data/data.actions';
-import { selectHistoryLimit } from '../store/data/data.selectors';
+import {
+  selectHistoryLimit,
+  selectIsRedoDisabled,
+  selectIsUndoDisabled,
+  selectOrigin,
+} from '../store/data/data.selectors';
 
 export default function Header({
   openLeft,
@@ -23,24 +28,27 @@ export default function Header({
 }) {
   const dispatch = useDispatch();
 
-  const historyLimit = useSelector(selectHistoryLimit)
-
-  const isUndoDisabled = historyLimit === 1;
-  const isRedoDisabled = historyLimit === 10;
+  const isUndoDisabled = useSelector(selectIsUndoDisabled);
+  const isRedoDisabled = useSelector(selectIsRedoDisabled);
+  const origin = useSelector(selectOrigin);
 
   const onClickUndo = () => {
+    if (isUndoDisabled) return;
     dispatch(ActionCreators.undo());
   };
 
   const onClickRedo = () => {
+    if (isRedoDisabled) return;
     dispatch(ActionCreators.redo());
   };
 
   const onClickExport = () => {
+    if (!origin) return;
     dispatch(exportOrigin());
   };
 
   const onClickAbstract = () => {
+    if (!origin) return;
     dispatch(abstract());
   };
 
@@ -88,6 +96,7 @@ export default function Header({
           color='light'
           size='sm'
           onClick={onClickExport}
+          disabled={!origin}
         >
           <HiOutlineUpload className='mr-1 text-base' />
           Export
@@ -140,7 +149,12 @@ export default function Header({
             <FaRedoAlt className='text-base' />
           </Button>
         </Button.Group>
-        <Button className='border-0' size='sm' onClick={onClickAbstract}>
+        <Button
+          className='border-0'
+          size='sm'
+          onClick={onClickAbstract}
+          disabled={!origin}
+        >
           Abstract
         </Button>
       </div>

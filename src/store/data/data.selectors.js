@@ -36,3 +36,14 @@ export const selectActiveNodesMap = createSelector(
 );
 
 export const selectHistoryLimit = (state) => state.data.limit;
+export const selectHistoryIndex = (state) => state.data.index;
+
+export const selectIsUndoDisabled = createSelector(
+  [selectHistoryIndex],
+  (index) => index <= 0
+);
+
+export const selectIsRedoDisabled = createSelector(
+  [selectHistoryIndex, selectHistoryLimit],
+  (index, limit) => index >= limit - 1
+);

@@ -144,7 +144,7 @@ class Sandbox extends React.Component {
     event.preventDefault();
     this.setState({
       ...this.state,
-      rightClicked: id,
+      rightClicked: node,
       rightClickedPosition: { x: event.clientX, y: event.clientY },
     });
     // toast(`Right clicked node ${id} in position (${node.x}, ${node.y})`);
@@ -715,7 +715,7 @@ class Sandbox extends React.Component {
           {/* {this.buildCommonInteractionsPanel()} */}
           <Graph key={data.nodes[0]?.id} ref='graph' {...graphProps} />
           <ContextMenu
-            nodeId={this.state.rightClicked}
+            node={this.state.rightClicked}
             x={this.state.rightClickedPosition.x}
             y={this.state.rightClickedPosition.y}
           />

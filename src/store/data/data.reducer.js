@@ -7,6 +7,7 @@ const initialState = {
   origin: null,
   pinnedNodes: null,
   activeNodes: null,
+  definitions: null,
   error: null,
 };
 
@@ -45,6 +46,24 @@ const dataReducer = (state = initialState, { type, payload }) => {
     case dataTypes.FAILURE_EXPAND:
     case dataTypes.FAILURE_FOLD:
     case dataTypes.FAILURE_ABSTRACT:
+      return {
+        ...state,
+        error: payload,
+        loading: false,
+      };
+    case dataTypes.REQUEST_DEFINE:
+      return {
+        ...state,
+        error: null,
+        loading: true,
+      };
+    case dataTypes.SUCCESS_DEFINE:
+      return {
+        ...state,
+        definitions: payload,
+        loading: false,
+      };
+    case dataTypes.FAILURE_DEFINE:
       return {
         ...state,
         error: payload,
