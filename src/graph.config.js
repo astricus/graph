@@ -1,3 +1,5 @@
+import { MAX_ZOOM, MIN_ZOOM } from "./constants";
+
 export const defaultConfig = {
   automaticRearrangeAfterDropNode: false,
   collapsible: false,
@@ -9,8 +11,8 @@ export const defaultConfig = {
   highlightDegree: 1,
   highlightOpacity: 1,
   linkHighlightBehavior: false,
-  maxZoom: 8,
-  minZoom: 0.1,
+  maxZoom: MAX_ZOOM,
+  minZoom: MIN_ZOOM,
   nodeHighlightBehavior: false,
   panAndZoom: false,
   staticGraph: false,

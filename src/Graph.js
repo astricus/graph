@@ -3,11 +3,14 @@ import React from 'react';
 import { JsonTree } from 'react-editable-json-tree';
 // import Form from 'react-jsonschema-form';
 import ReactTooltip from 'react-tooltip';
+import { select } from 'd3-selection';
+import { zoom } from 'd3-zoom';
 import { toast } from 'react-toastify';
 // import defaultConfig from 'react-d3-graph/src/components/graph/graph.config';
 import { Graph } from 'react-d3-graph';
 // import { select } from 'd3-selection';
 import {
+  genId,
   generateFormSchema,
   loadDataset,
   setValue,
@@ -17,6 +20,8 @@ import { isDeepEqual, merge } from 'react-d3-graph/src/utils';
 import { connect } from 'react-redux';
 import { defaultConfig } from './graph.config';
 import ContextMenu from './components/ContextMenu';
+import { selectZoom } from './store/settings/settings.selectors';
+import { setZoom } from './store/settings/settings.actions';
 
 // import 'react-toastify/dist/ReactToastify.css';
 // import './styles.css';
@@ -68,6 +73,7 @@ class Sandbox extends React.Component {
       schema,
       uiSchema,
       data: {
+        id: genId(),
         nodes: [],
         links: [],
       },
@@ -83,7 +89,10 @@ class Sandbox extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { graphData } = this.props;
+    const { graphData, currentZoom } = this.props;
+    if (currentZoom !== prevProps.currentZoom) {
+      select('svg').call(zoom.scaleTo, currentZoom);
+    }
     if (graphData !== prevProps.graphData) {
       if (graphData?.nodes?.length > 0 && graphData?.links?.length > 0) {
         this.setState((state) => ({
@@ -94,6 +103,7 @@ class Sandbox extends React.Component {
         this.setState((state) => ({
           ...state,
           data: {
+            id: genId(),
             nodes: [],
             links: [],
           },
@@ -202,8 +212,10 @@ class Sandbox extends React.Component {
    * @param {number} newZoom New zoom level
    */
   onZoomChange = (prevZoom, newZoom) => {
-    console.log(`Zoom changed from ${prevZoom} to ${newZoom}`);
-    this.setState({ currentZoom: newZoom });
+    // console.log(`Zoom changed from ${prevZoom} to ${newZoom}`);
+    if (prevZoom === newZoom) return;
+    this.props.setZoom(newZoom);
+    // this.setState({ currentZoom: newZoom });
   };
 
   /**
@@ -322,7 +334,7 @@ class Sandbox extends React.Component {
 
   onClickSubmit = () => {
     // Hack for allow submit button to live outside jsonform
-    document.body.querySelector('.invisible-button').click();
+    // document.body.querySelector('.invisible-button').click();
   };
 
   resetGraphConfig = () => {
@@ -682,15 +694,19 @@ class Sandbox extends React.Component {
     // This does not happens in this sandbox scenario running time, but if we set staticGraph config
     // to true in the constructor we will provide nodes with initial positions
     const data = {
+      id: this.state.data.id,
       nodes: this.state.data.nodes,
       links: this.state.data.links,
       focusedNodeId: this.state.data.focusedNodeId,
     };
 
     const graphProps = {
-      id: 'graph',
+      id: data.id,
       data,
-      config: this.state.config,
+      config: {
+        ...this.state.config,
+        currentZoom: this.props.currentZoom,
+      },
       onClickNode: this.onClickNode,
       onDoubleClickNode: this.onDoubleClickNode,
       onRightClickNode: this.onRightClickNode,
@@ -714,7 +730,7 @@ class Sandbox extends React.Component {
       return (
         <div className='mt-16'>
           {/* {this.buildCommonInteractionsPanel()} */}
-          <Graph key={data.nodes[0]?.id} ref='graph' {...graphProps} />
+          <Graph key={data.id} ref='graph' {...graphProps} />
           <ContextMenu
             node={this.state.rightClicked}
             x={this.state.rightClickedPosition.x}
@@ -832,9 +848,14 @@ class Sandbox extends React.Component {
 
 const mapStateToProps = (state) => ({
   graphData: state.data.present.graph,
+  currentZoom: selectZoom,
 });
 
-export default connect(mapStateToProps)(Sandbox);
+const mapDispatchToProps = {
+  setZoom,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Sandbox);
 
 class JSONContainer extends React.Component {
   shouldComponentUpdate(nextProps) {

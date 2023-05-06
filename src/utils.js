@@ -8,6 +8,8 @@ import { tooltips } from './graph-config-tooltips';
 
 const LABEL_POSITION_OPTIONS = ['left', 'right', 'top', 'bottom', 'center'];
 
+export const genId = () => Math.random().toString(36).substring(7);
+
 /**
  * This two functions generate the react-jsonschema-form
  * schema from some passed graph configuration.

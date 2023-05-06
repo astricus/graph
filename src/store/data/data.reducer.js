@@ -1,3 +1,4 @@
+import { genId } from '../../utils';
 import dataTypes from './data.types';
 
 const initialState = {
@@ -34,7 +35,10 @@ const dataReducer = (state = initialState, { type, payload }) => {
     case dataTypes.SUCCESS_ABSTRACT:
       return {
         ...state,
-        graph: payload.graph,
+        graph: {
+          ...payload.graph,
+          id: genId(),
+        },
         constraints: payload.constraints,
         origin: payload.origin,
         loading: false,
