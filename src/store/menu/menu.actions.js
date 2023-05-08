@@ -11,6 +11,13 @@ export const toggleDataModal = () => (dispatch, getState) => {
   dispatch(actionCreator(menuTypes.SET_OPEN_DATA_MODAL, !isDataModalOpen));
 };
 
+export const toggleSettingsModal = () => (dispatch, getState) => {
+  const isSettingsModalOpen = selectIsDataModalOpen(getState());
+  dispatch(
+    actionCreator(menuTypes.SET_OPEN_SETTINGS_MODAL, !isSettingsModalOpen)
+  );
+};
+
 export const toggleLeftSidebar = () => (dispatch, getState) => {
   const isLeftSidebarOpen = selectIsLeftSidebarOpen(getState());
   dispatch(actionCreator(menuTypes.SET_OPEN_LEFT_SIDEBAR, !isLeftSidebarOpen));
@@ -24,4 +31,10 @@ export const toggleRightSidebar = () => (dispatch, getState) => {
 };
 
 export const setConcepts = (payload) => (dispatch) =>
-  dispatch(actionCreator(menuTypes.SET_CONCEPTS, payload));
+  dispatch(actionCreator(menuTypes.SET_CONCEPTS_FILTERS, payload));
+
+export const setRelations = (payload) => (dispatch) =>
+  dispatch(actionCreator(menuTypes.SET_RELEATIONS_FILTERS, payload));
+
+export const setConstraints = (payload) => (dispatch) =>
+  dispatch(actionCreator(menuTypes.SET_CONSTRAINTS_FILTERS, payload));

@@ -1,21 +1,24 @@
-import { useState } from "react";
-import cn from "clsx";
-import {
-  HiChartPie,
-  HiInbox,
-  HiUser,
-  HiShoppingBag,
-  HiArrowSmRight,
-  HiTable,
-  HiViewBoards,
-  HiSearch,
-} from "react-icons/hi";
-import { HiSortAscending, HiSortDescending } from "react-icons/hi";
-import { Button, TextInput } from "flowbite-react";
-import Concepts from "./Concepts";
-import Relations from "./Relations";
+// import { useState } from "react";
+import cn from 'clsx';
+// import {
+//   HiChartPie,
+//   HiInbox,
+//   HiUser,
+//   HiShoppingBag,
+//   HiArrowSmRight,
+//   HiTable,
+//   HiViewBoards,
+//   HiSearch,
+// } from "react-icons/hi";
+// import { HiSortAscending, HiSortDescending } from "react-icons/hi";
+// import { Button, TextInput } from "flowbite-react";
+import Concepts from './Concepts';
+import Relations from './Relations';
+import { useSelector } from 'react-redux';
+import { selectIsLeftSidebarOpen } from '../store/menu/menu.selectors';
 
-export default function LeftSidebar({ open }) {
+export default function LeftSidebar() {
+  const open = useSelector(selectIsLeftSidebarOpen);
   return (
     <div>
       {/* <button
@@ -42,14 +45,14 @@ export default function LeftSidebar({ open }) {
       </button> */}
 
       <aside
-        id="default-sidebar"
+        id='default-sidebar'
         className={cn(
-          "absolute top-0 left-0 z-40 w-64 h-screen transition-transform",
-          { "-translate-x-full": !open, "translate-x-0": open }
+          'absolute top-0 left-0 z-40 w-64 h-screen transition-transform',
+          { '-translate-x-full': !open, 'translate-x-0': open }
         )}
-        aria-label="Sidenav"
+        aria-label='Sidenav'
       >
-        <div className="overflow-y-auto py-5 px-3 h-full bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+        <div className='overflow-y-auto py-5 px-3 h-full bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700'>
           {/* <div className="flex mb-3">
             <b>Concepts</b>
             <Button className="ml-auto mr-2" size="sm" color="light">
@@ -408,7 +411,7 @@ export default function LeftSidebar({ open }) {
             Settings page
             <div className="tooltip-arrow" data-popper-arrow></div>
           </div> */}
-          {/* <button
+        {/* <button
             type='button'
             data-dropdown-toggle='language-dropdown'
             className='inline-flex justify-center p-2 text-gray-500 rounded cursor-pointer dark:hover:text-white dark:text-gray-400 hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-600'
@@ -452,8 +455,8 @@ export default function LeftSidebar({ open }) {
               </g>
             </svg>
           </button> */}
-          {/* <!-- Dropdown --> */}
-          {/* <div
+        {/* <!-- Dropdown --> */}
+        {/* <div
             className="hidden z-50 my-4 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700"
             id="language-dropdown"
           >

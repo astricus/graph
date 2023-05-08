@@ -26,3 +26,13 @@ export const selectConcepts = createSelector(
   [selectMenuStore],
   ({ concepts }) => concepts
 );
+
+export const selectRelationFilters = createSelector(
+  [selectMenuStore],
+  ({ relations }) => relations
+);
+
+export const selectConstaintFilters = createSelector(
+  [selectMenuStore],
+  ({ constraints }) => constraints
+);

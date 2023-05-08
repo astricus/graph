@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-export const useFilters = (array, config) => {
+export const useFilters = (array, config, searchKey = 'name') => {
   const { search, sort } = config;
   const sortedArr = useMemo(() => {
     if (sort === 'nameAsc') {
@@ -59,10 +59,17 @@ export const useFilters = (array, config) => {
     }
     return sortedArr.length > 0
       ? sortedArr.filter(
-          ({ name }) =>
-            typeof name === 'string' &&
-            typeof search === 'string' &&
-            name.trim().toLowerCase().includes(search.trim().toLowerCase())
+          (item) => {
+            if (typeof item === 'string') {
+              return item.trim().toLowerCase().includes(search.trim().toLowerCase());
+            }
+            const name = item[searchKey] || '';
+            return (
+              typeof name === 'string' &&
+              typeof search === 'string' &&
+              name.trim().toLowerCase().includes(search.trim().toLowerCase())
+            )
+          }
         )
       : [];
   }, [sortedArr, search]);

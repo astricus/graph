@@ -18,15 +18,26 @@ import {
   selectOrigin,
 } from '../store/data/data.selectors';
 import Zoom from './Zoom';
+import {
+  selectIsLeftSidebarOpen,
+  selectIsRightSidebarOpen,
+} from '../store/menu/menu.selectors';
+import {
+  toggleDataModal,
+  toggleLeftSidebar,
+  toggleRightSidebar,
+} from '../store/menu/menu.actions';
 
-export default function Header({
-  openLeft,
-  openRight,
-  setOpenLeft,
-  // setOpenRight,
-  toggleModal,
-}) {
+export default function Header() {
   const dispatch = useDispatch();
+
+  const openLeft = useSelector(selectIsLeftSidebarOpen);
+  const openRight = useSelector(selectIsRightSidebarOpen);
+
+  const toggleOpenLeft = () => dispatch(toggleLeftSidebar());
+  const toggleOpenRight = () => dispatch(toggleRightSidebar());
+
+  const toggleDataLoadModal = () => dispatch(toggleDataModal());
 
   const isUndoDisabled = useSelector(selectIsUndoDisabled);
   const isRedoDisabled = useSelector(selectIsRedoDisabled);
@@ -52,8 +63,6 @@ export default function Header({
     dispatch(abstract());
   };
 
-  const toggleOpenLeft = () => setOpenLeft((prev) => !prev);
-  // const toggleOpenRight = () => setOpenRight((prev) => !prev);
   return (
     <Navbar
       fluid={true}
@@ -64,7 +73,7 @@ export default function Header({
           'ml-0': !openLeft,
           'ml-64': openLeft,
           'mr-0': !openRight,
-          'mr-64': openRight,
+          'mr-96': openRight,
         }
       )}
     >
@@ -87,7 +96,7 @@ export default function Header({
         {openLeft ? <RxCross1 /> : <RxHamburgerMenu />}
       </Button>
       <div className='flex min-w-fit w-6/12'>
-        <Button className='mr-3 border-0' size='sm' onClick={toggleModal}>
+        <Button className='mr-3 border-0' size='sm' onClick={toggleDataLoadModal}>
           <HiOutlineDownload className='mr-1 text-base' />
           Load
         </Button>
@@ -152,20 +161,16 @@ export default function Header({
         </Button>
       </div>
       <div className='flex md:order-2'>
-        {/* <Button color='light' size='sm' onClick={toggleOpenRight}>
+        <Button
+          className='border-0'
+          color='light'
+          size='sm'
+          onClick={toggleOpenRight}
+        >
           {openRight ? <RxCross1 /> : <RxHamburgerMenu />}
-        </Button> */}
-        {/* <Navbar.Toggle /> */}
+        </Button>
+        <Navbar.Toggle />
       </div>
-      {/* <Navbar.Collapse>
-        <Navbar.Link href='/navbars' active={true}>
-          Home
-        </Navbar.Link>
-        <Navbar.Link href='/navbars'>About</Navbar.Link>
-        <Navbar.Link href='/navbars'>Services</Navbar.Link>
-        <Navbar.Link href='/navbars'>Pricing</Navbar.Link>
-        <Navbar.Link href='/navbars'>Contact</Navbar.Link>
-      </Navbar.Collapse> */}
     </Navbar>
   );
 }

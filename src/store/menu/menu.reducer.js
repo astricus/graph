@@ -1,4 +1,4 @@
-import menuTypes from "./menu.types";
+import menuTypes from './menu.types';
 
 const initialState = {
   isDataModalOpen: false,
@@ -6,8 +6,15 @@ const initialState = {
   isLeftSidebarOpen: false,
   isRightSidebarOpen: false,
   concepts: {
-    search: "",
-    sort: "nameAsc",
+    search: '',
+    sort: 'nameAsc',
+  },
+  relations: {
+    search: '',
+    sort: 'nameAsc',
+  },
+  constraints: {
+    search: '',
   },
   error: null,
 };
@@ -34,15 +41,20 @@ const menuReducer = (state = initialState, { type, payload }) => {
         ...state,
         isRightSidebarOpen: payload,
       };
-    case menuTypes.SET_CONCEPTS:
+    case menuTypes.SET_CONCEPTS_FILTERS:
       return {
         ...state,
         concepts: payload,
       };
-    case menuTypes.SET_RELEATIONS:
+    case menuTypes.SET_RELEATIONS_FILTERS:
       return {
         ...state,
         relations: payload,
+      };
+    case menuTypes.SET_CONSTRAINTS_FILTERS:
+      return {
+        ...state,
+        constraints: payload,
       };
     default:
       return state;

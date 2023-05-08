@@ -8,10 +8,12 @@ import {
   TextInput,
   Radio,
 } from 'flowbite-react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { load } from '../store/data/data.actions';
+import { selectIsDataModalOpen } from '../store/menu/menu.selectors';
+import { toggleDataModal } from '../store/menu/menu.actions';
 
-export default function LoadDataModal({ show, onClose }) {
+export default function LoadDataModal() {
   const [file, setFile] = useState(null);
   const [mode, setMode] = useState('url'); // or 'file'
   const [url, setUrl] = useState(
@@ -19,6 +21,9 @@ export default function LoadDataModal({ show, onClose }) {
   );
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
+
+  const show = useSelector(selectIsDataModalOpen);
+  const onClose = () => dispatch(toggleDataModal());
 
   const onChangeUrl = (event) => {
     const { value } = event.target;
