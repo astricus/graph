@@ -6,7 +6,7 @@ export const useFilters = (array, config, searchKey = 'name') => {
     if (sort === 'nameAsc') {
       return [
         ...array
-          .filter((item) => item.name)
+          .filter((item) => item?.name)
           .sort((a, b) => {
             if (a.name < b.name) {
               return -1;
@@ -21,7 +21,7 @@ export const useFilters = (array, config, searchKey = 'name') => {
     } else if (sort === 'nameDesc') {
       return [
         ...array
-          .filter((item) => item.name)
+          .filter((item) => item?.name)
           .sort((a, b) => {
             if (a.name < b.name) {
               return 1;
@@ -36,7 +36,7 @@ export const useFilters = (array, config, searchKey = 'name') => {
     } else if (sort === 'stereotype') {
       return [
         ...array
-          .filter((node) => node?.fullName.includes(':'))
+          .filter((node) => node?.fullName?.includes(':'))
           .sort((a, b) => {
             if (a.fullName.split(':')[0] < b.fullName.split(':')[0]) {
               return -1;
@@ -46,7 +46,7 @@ export const useFilters = (array, config, searchKey = 'name') => {
               return 0;
             }
           }),
-        ...array.filter((node) => !node?.fullName.includes(':')),
+        ...array.filter((node) => !(node?.fullName?.includes(':'))),
       ];
     } else {
       return array;

@@ -1,86 +1,122 @@
-import { useState, useMemo } from 'react';
+import { useMemo } from 'react';
 import { Button, TextInput } from 'flowbite-react';
 import React from 'react';
 import {
   HiSearch,
   HiSortAscending,
   HiSortDescending,
-  HiOutlinePaperClip,
-  HiOutlineCursorClick,
   HiOutlineArrowLeft,
   HiOutlineArrowRight,
   HiOutlineSwitchVertical,
 } from 'react-icons/hi';
-import { useSelector } from 'react-redux';
-import { selectNodes } from '../store/data/data.selectors';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectLinks } from '../store/data/data.selectors';
+import { setRelations } from '../store/menu/menu.actions';
+import { selectRelationFilters } from '../store/menu/menu.selectors';
+import { usePagination } from '../hooks/usePagination';
+import { selectShowStereotype } from '../store/settings/settings.selectors';
+import clsx from 'clsx';
+import { useFilters } from '../hooks/useFilters';
 
-export function usePagination(array = [], numPerPage = 10) {
-  const [page, setPage] = useState(1);
-  const total = Math.ceil(array.length / numPerPage) || 1;
-
-  const pageUp = () => {
-    if (page < total) {
-      setPage((currentPage) => currentPage + 1);
-    }
-  };
-
-  const pageDown = () => {
-    if (page > 1) {
-      setPage((currentPage) => currentPage - 1);
-    }
-  };
-
-  const firstIdx = (page - 1) * numPerPage;
-  const lastIdx = Math.min(page * numPerPage, array.length);
-
-  const slice = useMemo(() => {
-    return array.slice(firstIdx, lastIdx);
-  }, [array, firstIdx, lastIdx]);
-
-  return { page, total, setPage, pageUp, pageDown, slice };
-}
-
-const Concept = ({ name }) => {
+const Relation = ({ relation }) => {
   return (
     <div className='flex w-full items-center'>
-      <HiOutlinePaperClip className='mr-2 hover:cursor-pointer' />
-      <p className='truncate mr-2'>{name}</p>
-      <HiOutlineCursorClick className='ml-auto' />
+      <p className='truncate mr-2'>{relation}</p>
     </div>
   );
 };
 
 export default function Relations() {
-  const nodes = useSelector(selectNodes);
-  const { page, total, setPage, pageUp, pageDown, slice } = usePagination(
-    nodes,
-    10
-  );
+  const links = useSelector(selectLinks);
+  const dispatch = useDispatch();
+  const showStereotype = useSelector(selectShowStereotype);
+  const relationFilters = useSelector(selectRelationFilters);
+  const { sort, search } = relationFilters;
+
+  /**
+   * @param {'nameAsc' | 'nameDesc' | 'stereotype'} sort
+   */
+  const changeSort = (sort) => {
+    dispatch(setRelations({ ...relationFilters, sort }));
+  };
+
+  const handleChangeSearch = (event) => {
+    const { value } = event.target;
+    dispatch(setRelations({ ...relationFilters, search: value }));
+  };
+
+  const filteredLinks = useFilters(links, relationFilters);
+
+  const { page, total, pageUp, pageDown, slice } = usePagination(filteredLinks, 10);
+
+  const linksSlice = useMemo(() => {
+    return (
+      <div className='mb-2 h-60'>
+        {slice.length > 0 &&
+          slice.map(({ id, name, fullName }) => {
+            const relation = showStereotype ? fullName : name;
+            return <Relation key={id} relation={relation} />;
+          })}
+      </div>
+    );
+  }, [slice, showStereotype]);
+
   return (
     <div>
       <div className='flex mb-3'>
         <b>Relations</b>
-        <Button className='ml-auto mr-2' size='xs' color='light'>
-          <HiSortAscending className='text-base' />
+        <Button
+          outline
+          className={clsx('ml-auto mr-2 transition-colors', {
+            '!border-blue-700': sort === 'nameAsc',
+          })}
+          size='xs'
+          color='light'
+          onClick={() => changeSort('nameAsc')}
+        >
+          <HiSortAscending
+            className={clsx('text-base transition-colors', {
+              'text-blue-700': sort === 'nameAsc',
+            })}
+          />
         </Button>
-        <Button className='mr-2' size='xs' color='light'>
-          <HiSortDescending className='text-base' />
+        <Button
+          outline
+          className={clsx('mr-2', { '!border-blue-700': sort === 'nameDesc' })}
+          size='xs'
+          color='light'
+          onClick={() => changeSort('nameDesc')}
+        >
+          <HiSortDescending
+            className={clsx('text-base transition-colors', {
+              'text-blue-700': sort === 'nameDesc',
+            })}
+          />
         </Button>
-        <Button size='xs' color='light'>
-          <HiOutlineSwitchVertical className='text-base' />
+        <Button
+          outline
+          className={clsx({ '!border-blue-700': sort === 'stereotype' })}
+          size='xs'
+          color='light'
+          onClick={() => changeSort('stereotype')}
+        >
+          <HiOutlineSwitchVertical
+            className={clsx('text-base transition-colors', {
+              'text-blue-700': sort === 'stereotype',
+            })}
+          />
         </Button>
       </div>
       <TextInput
         className='mb-2'
         type='search'
         icon={HiSearch}
-        placeholder='Quick search for concept'
+        placeholder='Quick search for relation'
+        value={search}
+        onChange={handleChangeSearch}
         required={true}
       />
-      <div className='mb-2'>
-        {slice.length > 0 &&
-          slice.map(({ name }) => <Concept key='name' name={name} />)}
-      </div>
+      <div className='mb-2'>{linksSlice}</div>
       <div className='flex w-full'>
         <Button size='sm' className='mr-2' color='light' onClick={pageDown}>
           <HiOutlineArrowLeft />
