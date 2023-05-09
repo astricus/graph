@@ -1,17 +1,14 @@
 import { useMemo } from 'react';
-import { Button, TextInput } from 'flowbite-react';
+import { TextInput } from 'flowbite-react';
 import React from 'react';
-import {
-  HiSearch,
-  HiOutlineArrowLeft,
-  HiOutlineArrowRight,
-} from 'react-icons/hi';
+import { HiSearch } from 'react-icons/hi';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectConstraints } from '../store/data/data.selectors';
 import { selectConstaintFilters } from '../store/menu/menu.selectors';
 import { setConstraints } from '../store/menu/menu.actions';
 import { usePagination } from '../hooks/usePagination';
 import { useFilters } from '../hooks/useFilters';
+import Pagination from './Pagination';
 
 const Constraint = ({ constraint }) => {
   return (
@@ -64,27 +61,12 @@ export default function Constraints() {
         onChange={handleChangeSearch}
       />
       {constraintSlice}
-      <div className='flex w-full items-center mt-auto'>
-        <Button
-          size='sm'
-          className='mr-2'
-          color='light'
-          onClick={pageDown}
-          disabled={page < 2}
-        >
-          <HiOutlineArrowLeft />
-        </Button>
-        <Button
-          size='sm'
-          className='mr-2'
-          color='light'
-          onClick={pageUp}
-          disabled={page > total - 1}
-        >
-          <HiOutlineArrowRight />
-        </Button>
-        {page} of {total}
-      </div>
+      <Pagination
+        page={page}
+        total={total}
+        pageUp={pageUp}
+        pageDown={pageDown}
+      />
     </div>
   );
 }
