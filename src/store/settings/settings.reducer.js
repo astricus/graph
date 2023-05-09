@@ -4,7 +4,7 @@ const initialState = {
   zoom: 1,
   hop: 2,
   definitionsNumber: 3,
-  abstractType: 'none',
+  abstractType: 'kind', // or 'topConcept'
   showStereotype: true,
   showColor: true,
   selectionColor: '#ff0000',

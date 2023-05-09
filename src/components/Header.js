@@ -26,6 +26,7 @@ import {
   toggleDataModal,
   toggleLeftSidebar,
   toggleRightSidebar,
+  toggleSettingsModal,
 } from '../store/menu/menu.actions';
 
 export default function Header() {
@@ -38,6 +39,7 @@ export default function Header() {
   const toggleOpenRight = () => dispatch(toggleRightSidebar());
 
   const toggleDataLoadModal = () => dispatch(toggleDataModal());
+  const toggleSettingsModalOpen = () => dispatch(toggleSettingsModal());
 
   const isUndoDisabled = useSelector(selectIsUndoDisabled);
   const isRedoDisabled = useSelector(selectIsRedoDisabled);
@@ -77,16 +79,6 @@ export default function Header() {
         }
       )}
     >
-      {/* <Navbar.Brand href='https://flowbite.com/'>
-        <img
-          src='https://flowbite.com/docs/images/logo.svg'
-          className='mr-3 h-6 sm:h-9'
-          alt='Flowbite Logo'
-        />
-        <span className='self-center whitespace-nowrap text-xl font-semibold dark:text-white'>
-          Flowbite
-        </span>
-      </Navbar.Brand> */}
       <Button
         className='mr-3 border-0'
         color='light'
@@ -114,7 +106,7 @@ export default function Header() {
           className='mr-3 border-0'
           color='light'
           size='sm'
-          onClick={onClickExport}
+          onClick={toggleSettingsModalOpen}
         >
           <HiOutlineAdjustments className='mr-1 text-base' />
           Settings

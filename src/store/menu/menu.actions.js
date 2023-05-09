@@ -4,6 +4,7 @@ import {
   selectIsDataModalOpen,
   selectIsLeftSidebarOpen,
   selectIsRightSidebarOpen,
+  selectIsSettingsModalOpen,
 } from './menu.selectors';
 
 export const toggleDataModal = () => (dispatch, getState) => {
@@ -12,7 +13,7 @@ export const toggleDataModal = () => (dispatch, getState) => {
 };
 
 export const toggleSettingsModal = () => (dispatch, getState) => {
-  const isSettingsModalOpen = selectIsDataModalOpen(getState());
+  const isSettingsModalOpen = selectIsSettingsModalOpen(getState());
   dispatch(
     actionCreator(menuTypes.SET_OPEN_SETTINGS_MODAL, !isSettingsModalOpen)
   );

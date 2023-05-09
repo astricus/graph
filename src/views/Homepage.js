@@ -3,6 +3,7 @@ import LeftSidebar from '../components/LeftSidebar';
 import RightSidebar from '../components/RightSidebar';
 import Sandbox from '../Graph';
 import LoadDataModal from '../components/LoadDataModal';
+import SettingsModal from '../components/SettingsModal';
 import { useSelector } from 'react-redux';
 import { selectIsLeftSidebarOpen, selectIsRightSidebarOpen } from '../store/menu/menu.selectors';
 
@@ -15,6 +16,7 @@ export default function Homepage() {
       <LeftSidebar open={openLeft} />
       <RightSidebar open={openRight} />
       <LoadDataModal />
+      <SettingsModal />
       <Sandbox />
     </div>
   );

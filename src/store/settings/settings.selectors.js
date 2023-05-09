@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-const selectSettings = (state) => state.settings;
+export const selectSettings = (state) => state.settings;
 
 export const selectZoom = createSelector(
   [selectSettings],
