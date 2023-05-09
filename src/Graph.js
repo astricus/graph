@@ -112,10 +112,20 @@ class Sandbox extends React.Component {
     }
   }
 
-  onLeftClick = () => this.setState({ ...this.state, rightClicked: null });
+  removeRightClickedNode = () => {
+    if (this.state.rightClicked) {
+      this.setState({ ...this.state, rightClicked: null });
+    }
+  };
+  removeRightClickedNodeOnPressure = (event) => {
+    if (event.pressure > 0 && this.state.rightClicked) {
+      this.setState({ ...this.state, rightClicked: null });
+    }
+  };
 
   componentDidMount() {
-    document.addEventListener('click', this.onLeftClick);
+    document.addEventListener('click', this.removeRightClickedNode);
+    document.addEventListener('pointermove', this.removeRightClickedNodeOnPressure);
     const { graphData } = this.props;
     if (graphData?.nodes?.length > 0 && graphData?.links?.length > 0) {
       this.setState((state) => ({
@@ -126,7 +136,8 @@ class Sandbox extends React.Component {
   }
 
   componentWillUnmount() {
-    document.removeEventListener('click', this.onLeftClick);
+    document.removeEventListener('click', this.removeRightClickedNode);
+    document.removeEventListener('pointermove', this.removeRightClickedNodeOnPressure);
   };
 
   onClickGraph = () => {
@@ -135,15 +146,14 @@ class Sandbox extends React.Component {
   };
 
   onClickNode = (id, node) => {
-    this.setState({ clicked: node });
-    // toast(`Clicked node ${id} in position (${node.x}, ${node.y})`);
     // NOTE: below sample implementation for focusAnimation when clicking on node
-    // this.setState({
-    //     data: {
-    //         ...this.state.data,
-    //         focusedNodeId: this.state.data.focusedNodeId !== id ? id : null
-    //     }
-    // });
+    this.setState({
+      clicked: node,
+      data: {
+        ...this.state.data,
+        focusedNodeId: this.state.data.focusedNodeId !== id ? id : null
+      }
+    });
   };
 
   onDoubleClickNode = (id, node) => {
@@ -212,7 +222,6 @@ class Sandbox extends React.Component {
    * @param {number} newZoom New zoom level
    */
   onZoomChange = (prevZoom, newZoom) => {
-    // console.log(`Zoom changed from ${prevZoom} to ${newZoom}`);
     if (prevZoom === newZoom) return;
     this.props.setZoom(newZoom);
     // this.setState({ currentZoom: newZoom });
@@ -375,257 +384,107 @@ class Sandbox extends React.Component {
     return Promise.resolve();
   };
 
-  onAddFile = (event) => {
-    const { files } = event.target;
-    this.setState({ file: files[0] });
-  };
+  // onAddFile = (event) => {
+  //   const { files } = event.target;
+  //   this.setState({ file: files[0] });
+  // };
 
-  onSubmitFile = async () => {
-    try {
-      const formData = new FormData();
-      formData.append('data', this.state.file);
-      const response = await fetch(`${this.state.link}/load_data`, {
-        method: 'PUT',
-        body: formData,
-      });
-      const data = await response.json();
-      this.setState({ data });
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // onSubmitFile = async () => {
+  //   try {
+  //     const formData = new FormData();
+  //     formData.append('data', this.state.file);
+  //     const response = await fetch(`${this.state.link}/load_data`, {
+  //       method: 'PUT',
+  //       body: formData,
+  //     });
+  //     const data = await response.json();
+  //     this.setState({ data });
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
-  onPlus = async () => {
-    try {
-      const response = await fetch(`${this.state.link}/plus`, {
-        method: 'POST',
-      });
-      const data = await response.json();
-      this.setState({ data });
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // onPlus = async () => {
+  //   try {
+  //     const response = await fetch(`${this.state.link}/plus`, {
+  //       method: 'POST',
+  //     });
+  //     const data = await response.json();
+  //     this.setState({ data });
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
-  onMinus = async () => {
-    try {
-      const response = await fetch(`${this.state.link}/minus`, {
-        method: 'POST',
-      });
-      const data = await response.json();
-      this.setState({ data });
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // onMinus = async () => {
+  //   try {
+  //     const response = await fetch(`${this.state.link}/minus`, {
+  //       method: 'POST',
+  //     });
+  //     const data = await response.json();
+  //     this.setState({ data });
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
-  onSubmitSearch = async () => {
-    try {
-      const { link, search } = this.state;
-      const response = await fetch(`${link}/unfold?concept=${search}`, {
-        method: 'POST',
-      });
-      const data = await response.json();
-      this.setState({ data });
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // onSubmitSearch = async () => {
+  //   try {
+  //     const { link, search } = this.state;
+  //     const response = await fetch(`${link}/unfold?concept=${search}`, {
+  //       method: 'POST',
+  //     });
+  //     const data = await response.json();
+  //     this.setState({ data });
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
-  onSubmitExpand = async () => {
-    try {
-      const { link, search } = this.state;
-      const response = await fetch(`${link}/expand?concept=${search}`, {
-        method: 'POST',
-      });
-      const data = await response.json();
-      this.setState({ data });
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // onSubmitExpand = async () => {
+  //   try {
+  //     const { link, search } = this.state;
+  //     const response = await fetch(`${link}/expand?concept=${search}`, {
+  //       method: 'POST',
+  //     });
+  //     const data = await response.json();
+  //     this.setState({ data });
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   /**
    * Update graph data each time an update is triggered
    * by JsonTree
    * @param {Object} data update graph data (nodes and links)
    */
-  onGraphDataUpdate = (data) => {
-    const removedNodeIndex = data.nodes.findIndex((n) => !n);
+  // onGraphDataUpdate = (data) => {
+  //   const removedNodeIndex = data.nodes.findIndex((n) => !n);
 
-    let removedNodeId = null;
+  //   let removedNodeId = null;
 
-    if (removedNodeIndex !== -1 && this.state.nodeIdToBeRemoved) {
-      removedNodeId = this.state.nodeIdToBeRemoved;
-    }
+  //   if (removedNodeIndex !== -1 && this.state.nodeIdToBeRemoved) {
+  //     removedNodeId = this.state.nodeIdToBeRemoved;
+  //   }
 
-    const nodes = data.nodes.filter(Boolean);
-    const isValidLink = (link) =>
-      link && link.source !== removedNodeId && link.target !== removedNodeId;
-    const links = data.links.filter(isValidLink);
+  //   const nodes = data.nodes.filter(Boolean);
+  //   const isValidLink = (link) =>
+  //     link && link.source !== removedNodeId && link.target !== removedNodeId;
+  //   const links = data.links.filter(isValidLink);
 
-    this.setState({
-      data: {
-        links,
-        nodes,
-      },
-    });
-  };
+  //   this.setState({
+  //     data: {
+  //       id: data.id,
+  //       links,
+  //       nodes,
+  //     },
+  //   });
+  // };
 
   onInputChange = (event) => {
     const { name, value } = event.target;
     this.setState({ [name]: value });
-  };
-
-  /**
-   * Build common piece of the interface that contains some interactions such as
-   * fullscreen, play/pause, + and - buttons.
-   */
-  buildCommonInteractionsPanel = () => {
-    // const btnStyle = {
-    //   cursor: this.state.config.staticGraph ? 'not-allowed' : 'pointer',
-    // };
-
-    // const fullscreen = this.state.fullscreen ? (
-    //   <span className='cross-icon' onClick={this.onToggleFullScreen}>
-    //     ❌
-    //   </span>
-    // ) : (
-    //   <button onClick={this.onToggleFullScreen} className='btn btn-primary'>
-    //     Fullscreen
-    //   </button>
-    // );
-
-    return (
-      <div className='mt-16'>
-        {/* {fullscreen} */}
-        {/* <button
-          onClick={this.restartGraphSimulation}
-          className='btn btn-default btn-margin-left'
-          style={btnStyle}
-          disabled={this.state.config.staticGraph}
-        >
-          ▶️
-        </button>
-        <button
-          onClick={this.pauseGraphSimulation}
-          className='btn btn-default btn-margin-left'
-          style={btnStyle}
-          disabled={this.state.config.staticGraph}
-        >
-          ⏸️
-        </button>
-        <button
-          onClick={this.resetNodesPositions}
-          className='btn btn-default btn-margin-left'
-          style={btnStyle}
-          disabled={this.state.config.staticGraph}
-        >
-          Unstick nodes
-        </button>
-        <button
-          onClick={this.onClickAddNode}
-          className='btn btn-default btn-margin-left'
-        >
-          +
-        </button>
-        <button
-          onClick={this.onClickRemoveNode}
-          className='btn btn-default btn-margin-left'
-        >
-          -
-        </button> */}
-        {/* <span className='container__graph-info'> */}
-        {/* eslint-disable-next-line max-len */}
-        {/* <b>Nodes: </b> {this.state.data.nodes.length} |<b>Links: </b>{' '}
-          {this.state.data.links.length} |<b>Zoom: </b>{' '}
-          {this.state.currentZoom ? this.state.currentZoom.toFixed(3) : '-'}
-        </span> */}
-        {/* {!deactivateCodeSandboxLink(this.state.config) && (
-          <a href='javascript:void(0)'>
-            <img
-              width='150px'
-              alt='Edit react-d3-graph'
-              src='https://codesandbox.io/static/img/play-codesandbox.svg'
-              onClick={() =>
-                createCodeSandbox(this.state.config, this.state.data)
-              }
-            />
-          </a>
-        )} */}
-        {/* <input
-          style={{ display: 'inline-block', marginLeft: '20px' }}
-          className='btn btn-primary'
-          name='file'
-          type='file'
-          onChange={this.onAddFile}
-        />
-        <button
-          style={{ marginLeft: '20px' }}
-          className='btn btn-primary'
-          disabled={!this.state.file}
-          onClick={this.onSubmitFile}
-        >
-          Submit data
-        </button>
-        <input
-          type='text'
-          class='form-control'
-          style={{
-            display: 'inline-block',
-            width: '240px',
-            marginLeft: '20px',
-            transform: 'translateY(2px)',
-          }}
-          placeholder='Link'
-          name='link'
-          value={this.state.link}
-          onChange={this.onInputChange}
-        />
-        <button
-          style={{ marginLeft: '20px' }}
-          className='btn btn-primary'
-          onClick={this.onPlus}
-        >
-          +
-        </button>
-        <button
-          style={{ marginLeft: '20px' }}
-          className='btn btn-primary'
-          onClick={this.onMinus}
-        >
-          -
-        </button>
-        <input
-          type='search'
-          class='form-control'
-          style={{
-            display: 'inline-block',
-            width: '240px',
-            marginLeft: '20px',
-            transform: 'translateY(2px)',
-          }}
-          placeholder='Search'
-          name='search'
-          value={this.state.search}
-          onChange={this.onInputChange}
-        />
-        <button
-          style={{ marginLeft: '20px' }}
-          className='btn btn-primary'
-          onClick={this.onSubmitSearch}
-        >
-          Search
-        </button>
-        <button
-          style={{ marginLeft: '20px' }}
-          className='btn btn-primary'
-          onClick={this.onSubmitExpand}
-        >
-          Expand
-        </button> */}
-      </div>
-    );
   };
 
   copyConfigToClipboard = () => {
@@ -720,129 +579,21 @@ class Sandbox extends React.Component {
       onNodePositionChange: this.onNodePositionChange,
       onZoomChange: this.onZoomChange,
     };
+    graphProps.config = Object.assign({}, graphProps.config, {
+      height: window.innerHeight,
+      width: window.innerWidth,
+    });
 
-    if (this.state.fullscreen) {
-      graphProps.config = Object.assign({}, graphProps.config, {
-        height: window.innerHeight,
-        width: window.innerWidth,
-      });
-
-      return (
-        <div className='mt-16'>
-          {/* {this.buildCommonInteractionsPanel()} */}
-          <Graph key={data.id} ref='graph' {...graphProps} />
-          <ContextMenu
-            node={this.state.rightClicked}
-            x={this.state.rightClickedPosition.x}
-            y={this.state.rightClickedPosition.y}
-          />
-        </div>
-      );
-    } else {
-      // @TODO: Only show configs that differ from default ones in "Your config" box
-      return (
-        <div className='container-fluid'>
-          <div className='row'>
-            <div className='col-9'>
-              {this.buildCommonInteractionsPanel()}
-              <div className='container__graph-area'>
-                <Graph ref='graph' {...graphProps} />
-              </div>
-            </div>
-            <div className='col-3'>
-              {/* <h4>
-                <a
-                  href='https://github.com/danielcaldas/react-d3-graph'
-                  target='_blank'
-                  rel='noreferrer'
-                >
-                  {reactD3GraphVersion
-                    ? `react-d3-graph@${reactD3GraphVersion}`
-                    : 'react-d3-graph'}
-                </a>
-              </h4> */}
-              {/* <h4>
-                <a
-                  href='https://danielcaldas.github.io/react-d3-graph/docs/index.html'
-                  target='_blank'
-                  rel='noreferrer'
-                >
-                  📖Documentation
-                </a>
-              </h4>
-              <h5>
-                <a
-                  href='https://github.com/danielcaldas/react-d3-graph/stargazers'
-                  target='_blank'
-                  style={{ marginLeft: '4px' }}
-                  rel='noreferrer'
-                >
-                  ⭐Become a stargazer
-                </a>
-              </h5> */}
-              <h3>Node data</h3>
-              {this.renderNodeValues()}
-              {/* <Form
-                className='form-wrapper'
-                schema={this.state.schema}
-                uiSchema={this.state.uiSchema}
-                onChange={this.refreshGraph}
-                onSubmit={this.onSubmit}
-              >
-                <button className='invisible-button' type='submit' />
-              </Form> */}
-              {/* <button
-                className='submit-button btn btn-primary'
-                onClick={this.onClickSubmit}
-              >
-                Generate config
-              </button>
-              <button
-                className='reset-button btn btn-danger'
-                onClick={this.resetGraphConfig}
-              >
-                Reset config
-              </button> */}
-            </div>
-          </div>
-          <div className='row'>
-            <div className='col-6'>
-              <h4>
-                Your config
-                <small
-                  className='btn-clipboard'
-                  onClick={this.copyConfigToClipboard}
-                >
-                  📋 copy to clipboard
-                </small>
-              </h4>
-              <JSONContainer
-                data={this.state.generatedConfig}
-                staticData={false}
-              />
-            </div>
-            <div className='col-6'>
-              <h4>
-                Graph Data <small>(editable)</small>
-              </h4>
-              <div className='json-data-container'>
-                <JsonTree
-                  data={this.state.data}
-                  beforeRemoveAction={this.onBeforeRemoveGraphData}
-                  onFullyUpdate={this.onGraphDataUpdate}
-                />
-              </div>
-            </div>
-          </div>
-          <ReactTooltip
-            place={'left'}
-            multiline={true}
-            html={true}
-            clickable={true}
-          />
-        </div>
-      );
-    }
+    return (
+      <div className='mt-16'>
+        <Graph key={data.id} ref='graph' {...graphProps} />
+        <ContextMenu
+          node={this.state.rightClicked}
+          x={this.state.rightClickedPosition.x}
+          y={this.state.rightClickedPosition.y}
+        />
+      </div>
+    );
   }
 }
 
@@ -856,19 +607,3 @@ const mapDispatchToProps = {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Sandbox);
-
-class JSONContainer extends React.Component {
-  shouldComponentUpdate(nextProps) {
-    return (
-      !this.props.staticData && !isDeepEqual(nextProps.data, this.props.data)
-    );
-  }
-
-  render() {
-    return (
-      <pre className='json-data-container'>
-        {JSON.stringify(this.props.data, null, 2)}
-      </pre>
-    );
-  }
-}
