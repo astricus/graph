@@ -47,3 +47,18 @@ export const selectIsRedoDisabled = createSelector(
   [selectHistoryIndex, selectHistoryLimit],
   (index, limit) => index >= limit - 1
 );
+
+export const selectDefinitionsData = createSelector(
+  [selectDataStore],
+  ({ definitions }) => definitions
+);
+
+export const selectDefinitionsConcept = createSelector(
+  [selectDefinitionsData],
+  (definitions) => definitions?.concept || ''
+);
+
+export const selectDefinitions = createSelector(
+  [selectDefinitionsData],
+  (definitions) => definitions?.definition || []
+);

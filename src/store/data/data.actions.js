@@ -7,6 +7,9 @@ import {
   selectOrigin,
   selectPinnedNodesMap,
 } from './data.selectors';
+import { selectHop } from '../settings/settings.selectors';
+import { selectDefinitionsNumber } from '../settings/settings.selectors';
+import { toggleDefiniotionsModal, toggleDefinitionsModal } from '../menu/menu.actions';
 
 export const load = (formData) => async (dispatch) => {
   try {
@@ -25,7 +28,7 @@ export const focus = (nodeId) => async (dispatch, getState) => {
   try {
     dispatch(actionCreator(dataTypes.REQUEST_FOCUS));
     const origin = selectOrigin(getState());
-    const hop = 2; // TODO: make this configurable
+    const hop = selectHop(getState());
     const graphData = await api.focus({ origin, node: nodeId, hop });
     dispatch(actionCreator(dataTypes.SUCCESS_FOCUS, graphData));
     return true;
@@ -150,15 +153,16 @@ export const exportOrigin = () => (dispatch, getState) => {
   }
 };
 
-export const define = (nodeName) => async (dispatch) => {
+export const define = (nodeName) => async (dispatch, getState) => {
   try {
     dispatch(actionCreator(dataTypes.REQUEST_DEFINE));
-    const numberOfDef = 3; // todo: make this configurable
+    const numberOfDef = selectDefinitionsNumber(getState());
     const definitions = await api.define({
       concept: nodeName,
       number_of_def: numberOfDef,
     });
     dispatch(actionCreator(dataTypes.SUCCESS_DEFINE, definitions));
+    dispatch(toggleDefinitionsModal());
     return true;
   } catch (error) {
     console.error(error);

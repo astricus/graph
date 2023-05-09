@@ -5,7 +5,7 @@ const initialState = {
   hop: 2,
   definitionsNumber: 3,
   abstractType: 'kind', // or 'topConcept'
-  showStereotype: true,
+  showStereotype: false,
   showColor: true,
   selectionColor: '#ff0000',
 };

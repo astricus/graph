@@ -115,7 +115,7 @@ export default function Header() {
           className='mr-3 border-0'
           color='light'
           size='sm'
-          onClick={onClickExport}
+          onClick={() => {}}
         >
           <HiOutlineInformationCircle className='mr-1 text-base' />
           About

@@ -6,6 +6,7 @@ import LoadDataModal from '../components/LoadDataModal';
 import SettingsModal from '../components/SettingsModal';
 import { useSelector } from 'react-redux';
 import { selectIsLeftSidebarOpen, selectIsRightSidebarOpen } from '../store/menu/menu.selectors';
+import DefinitionsModal from '../components/DefinitionsModal';
 
 export default function Homepage() {
   const openLeft = useSelector(selectIsLeftSidebarOpen);
@@ -17,6 +18,7 @@ export default function Homepage() {
       <RightSidebar open={openRight} />
       <LoadDataModal />
       <SettingsModal />
+      <DefinitionsModal />
       <Sandbox />
     </div>
   );
