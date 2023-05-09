@@ -1,10 +1,10 @@
 /*eslint require-jsdoc: 0, valid-jsdoc: 0, no-console: 0, max-lines: 0*/
 import React from 'react';
-import { JsonTree } from 'react-editable-json-tree';
+// import { JsonTree } from 'react-editable-json-tree';
 // import Form from 'react-jsonschema-form';
-import ReactTooltip from 'react-tooltip';
-import { select } from 'd3-selection';
-import { zoom } from 'd3-zoom';
+// import ReactTooltip from 'react-tooltip';
+// import { select } from 'd3-selection';
+// import { zoom } from 'd3-zoom';
 import { toast } from 'react-toastify';
 // import defaultConfig from 'react-d3-graph/src/components/graph/graph.config';
 import { Graph } from 'react-d3-graph';
@@ -89,10 +89,10 @@ class Sandbox extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { graphData, currentZoom } = this.props;
-    if (currentZoom !== prevProps.currentZoom) {
-      select('svg').call(zoom.scaleTo, currentZoom);
-    }
+    const { graphData } = this.props;
+    // if (currentZoom !== prevProps.currentZoom) {
+    //   select('svg').call(zoom.scaleTo, currentZoom);
+    // }
     if (graphData !== prevProps.graphData) {
       if (graphData?.nodes?.length > 0 && graphData?.links?.length > 0) {
         this.setState((state) => ({
@@ -181,31 +181,34 @@ class Sandbox extends React.Component {
   };
 
   onMouseOverNode = (id, node) => {
-    console.info(
-      `Do something when mouse is over node ${id} in position (${node.x}, ${node.y})`
-    );
+    // console.info(
+    //   `Do something when mouse is over node ${id} in position (${node.x}, ${node.y})`
+    // );
   };
 
   onMouseOutNode = (id, node) => {
-    console.info(
-      `Do something when mouse is out of node ${id} in position (${node.x}, ${node.y})`
-    );
+    // console.info(
+    //   `Do something when mouse is out of node ${id} in position (${node.x}, ${node.y})`
+    // );
   };
 
-  onMouseOverLink = (source, target) =>
-    console.info(
-      `Do something when mouse is over link between ${source} and ${target}`
-    );
+  onMouseOverLink = (source, target) => {
+    // console.info(
+    //   `Do something when mouse is over link between ${source} and ${target}`
+    // );
+  }
 
-  onMouseOutLink = (source, target) =>
-    console.info(
-      `Do something when mouse is out of link between ${source} and ${target}`
-    );
+  onMouseOutLink = (source, target) => {
+    // console.info(
+    //   `Do something when mouse is out of link between ${source} and ${target}`
+    // );
+  }
 
-  onNodePositionChange = (nodeId, x, y) =>
-    console.info(
-      `Node ${nodeId} is moved to new position. New position is (${x}, ${y}) (x,y)`
-    );
+  onNodePositionChange = (nodeId, x, y) => {
+    // console.info(
+    //   `Node ${nodeId} is moved to new position. New position is (${x}, ${y}) (x,y)`
+    // );
+  }
 
   /**
    * Sets on/off fullscreen visualization mode.
@@ -560,7 +563,7 @@ class Sandbox extends React.Component {
     };
 
     const graphProps = {
-      id: data.id,
+      id: 'graph',
       data,
       config: {
         ...this.state.config,
