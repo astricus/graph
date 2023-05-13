@@ -5,6 +5,7 @@ const initialState = {
   loading: false,
   graph: null,
   constraints: [],
+  abstractCount: 0,
   origin: null,
   pinnedNodes: null,
   activeNodes: null,
@@ -54,6 +55,11 @@ const dataReducer = (state = initialState, { type, payload }) => {
         ...state,
         error: payload,
         loading: false,
+      };
+    case dataTypes.SET_ABSTRACT_COUNT:
+      return {
+        ...state,
+        abstractCount: payload,
       };
     case dataTypes.REQUEST_DEFINE:
       return {

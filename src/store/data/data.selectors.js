@@ -62,3 +62,8 @@ export const selectDefinitions = createSelector(
   [selectDefinitionsData],
   (definitions) => definitions?.definition || []
 );
+
+export const selectAbstractCount = createSelector(
+  [selectDataStore],
+  ({ abstractCount }) => abstractCount
+);

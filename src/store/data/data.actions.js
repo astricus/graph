@@ -3,19 +3,24 @@ import { actionCreator } from '../utils';
 import * as api from './data.api';
 import { saveAs } from 'file-saver';
 import {
+  selectAbstractCount,
   selectActiveNodesMap,
   selectOrigin,
   selectPinnedNodesMap,
 } from './data.selectors';
 import { selectHop } from '../settings/settings.selectors';
 import { selectDefinitionsNumber } from '../settings/settings.selectors';
-import { toggleDefiniotionsModal, toggleDefinitionsModal } from '../menu/menu.actions';
+import {
+  toggleDefinitionsModal,
+} from '../menu/menu.actions';
+import { MAX_ABSTRACT_COUNT } from '../../constants';
 
 export const load = (formData) => async (dispatch) => {
   try {
     dispatch(actionCreator(dataTypes.REQUEST_LOAD));
     const graphData = await api.load(formData);
     dispatch(actionCreator(dataTypes.SUCCESS_LOAD, graphData));
+    dispatch(clearAbstractCount());
     return true;
   } catch (error) {
     console.error(error);
@@ -111,9 +116,22 @@ export const fold = (nodeId) => async (dispatch, getState) => {
 export const abstract = () => async (dispatch, getState) => {
   try {
     dispatch(actionCreator(dataTypes.REQUEST_ABSTRACT));
+    const abstractCount = selectAbstractCount(getState());
+    let abstractType = '';
+    switch (abstractCount) {
+      case 1:
+        abstractType = 'parthood';
+        break;
+      case 2:
+        abstractType = 'hierarchy';
+        break;
+      default:
+        abstractType = 'aspects';
+    }
     const origin = selectOrigin(getState());
-    const graphData = await api.abstract({ origin });
+    const graphData = await api.abstract({ origin, abs_type: [abstractType] });
     dispatch(actionCreator(dataTypes.SUCCESS_ABSTRACT, graphData));
+    dispatch(increaseAbstractCount());
     return true;
   } catch (error) {
     console.error(error);
@@ -168,5 +186,16 @@ export const define = (nodeName) => async (dispatch, getState) => {
     console.error(error);
     dispatch(actionCreator(dataTypes.FAILURE_DEFINE, error));
     return false;
+  }
+};
+
+export const clearAbstractCount = () => (dispatch, getState) => {
+  dispatch(actionCreator(dataTypes.SET_ABSTRACT_COUNT, 0));
+};
+
+export const increaseAbstractCount = () => (dispatch, getState) => {
+  const abstractCount = selectAbstractCount(getState());
+  if (abstractCount < MAX_ABSTRACT_COUNT) {
+    dispatch(actionCreator(dataTypes.SET_ABSTRACT_COUNT, abstractCount + 1));
   }
 };

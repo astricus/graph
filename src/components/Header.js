@@ -13,6 +13,7 @@ import { ActionCreators } from 'redux-undo';
 import { useDispatch, useSelector } from 'react-redux';
 import { abstract, exportOrigin } from '../store/data/data.actions';
 import {
+  selectAbstractCount,
   selectIsRedoDisabled,
   selectIsUndoDisabled,
   selectOrigin,
@@ -28,12 +29,14 @@ import {
   toggleRightSidebar,
   toggleSettingsModal,
 } from '../store/menu/menu.actions';
+import { MAX_ABSTRACT_COUNT } from '../constants';
 
 export default function Header() {
   const dispatch = useDispatch();
 
   const openLeft = useSelector(selectIsLeftSidebarOpen);
   const openRight = useSelector(selectIsRightSidebarOpen);
+  const isAbstractFull = useSelector(selectAbstractCount) === MAX_ABSTRACT_COUNT;
 
   const toggleOpenLeft = () => dispatch(toggleLeftSidebar());
   const toggleOpenRight = () => dispatch(toggleRightSidebar());
@@ -144,10 +147,11 @@ export default function Header() {
           </Button>
         </Button.Group>
         <Button
+          title={isAbstractFull ? 'This models is already a full abstraction' : 'Abstract'}
           className='border-0'
           size='sm'
           onClick={onClickAbstract}
-          disabled={!origin}
+          disabled={!origin || isAbstractFull}
         >
           Abstract
         </Button>

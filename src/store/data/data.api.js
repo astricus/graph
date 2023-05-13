@@ -128,7 +128,7 @@ export const fold = async (data) => {
 export const abstract = async (data = {}) => {
   data = {
     ...data,
-    abs_type: ['parthood', 'hierarchy', 'aspects'],
+    // abs_type: ['parthood', 'hierarchy', 'aspects'],
   }
   const response = await graphApi.post({
     endpoint: 'abstract',
