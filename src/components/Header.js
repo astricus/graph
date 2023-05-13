@@ -24,6 +24,7 @@ import {
   selectIsRightSidebarOpen,
 } from '../store/menu/menu.selectors';
 import {
+  toggleAboutModal,
   toggleDataModal,
   toggleLeftSidebar,
   toggleRightSidebar,
@@ -43,6 +44,7 @@ export default function Header() {
 
   const toggleDataLoadModal = () => dispatch(toggleDataModal());
   const toggleSettingsModalOpen = () => dispatch(toggleSettingsModal());
+  const toggleAboutModalOpen = () => dispatch(toggleAboutModal());
 
   const isUndoDisabled = useSelector(selectIsUndoDisabled);
   const isRedoDisabled = useSelector(selectIsRedoDisabled);
@@ -118,7 +120,7 @@ export default function Header() {
           className='mr-3 border-0'
           color='light'
           size='sm'
-          onClick={() => {}}
+          onClick={toggleAboutModalOpen}
         >
           <HiOutlineInformationCircle className='mr-1 text-base' />
           About

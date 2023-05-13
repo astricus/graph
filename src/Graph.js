@@ -16,7 +16,7 @@ import {
   setValue,
   tooltipReducer,
 } from './utils';
-import { isDeepEqual, merge } from 'react-d3-graph/src/utils';
+import { merge } from 'react-d3-graph/src/utils';
 import { connect } from 'react-redux';
 import { defaultConfig } from './graph.config';
 import ContextMenu from './components/ContextMenu';
@@ -89,10 +89,14 @@ class Sandbox extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { graphData } = this.props;
-    // if (currentZoom !== prevProps.currentZoom) {
-    //   select('svg').call(zoom.scaleTo, currentZoom);
-    // }
+    const { graphData, currentZoom } = this.props;
+    if (currentZoom !== prevProps.currentZoom) {
+      const wheelEvt = document.createEvent('MouseEvent');
+      wheelEvt.initEvent('wheel', true, true);
+      wheelEvt.deltaY = 100 * (prevProps.currentZoom - currentZoom);
+      const graphEl = document.querySelector('#graph-graph-wrapper');
+      graphEl.dispatchEvent(wheelEvt);
+    }
     if (graphData !== prevProps.graphData) {
       if (graphData?.nodes?.length > 0 && graphData?.links?.length > 0) {
         this.setState((state) => ({
@@ -226,7 +230,7 @@ class Sandbox extends React.Component {
    */
   onZoomChange = (prevZoom, newZoom) => {
     if (prevZoom === newZoom) return;
-    this.props.setZoom(newZoom);
+    // this.props.setZoom(newZoom);
     // this.setState({ currentZoom: newZoom });
   };
 
@@ -602,7 +606,7 @@ class Sandbox extends React.Component {
 
 const mapStateToProps = (state) => ({
   graphData: state.data.present.graph,
-  currentZoom: selectZoom,
+  currentZoom: selectZoom(state),
 });
 
 const mapDispatchToProps = {

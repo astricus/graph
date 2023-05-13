@@ -17,6 +17,11 @@ export const selectIsDefinitionsModalOpen = createSelector(
   ({ isDefinitionsModalOpen }) => isDefinitionsModalOpen 
 );
 
+export const selectIsAboutModalOpen = createSelector(
+  [selectMenuStore],
+  ({ isAboutModalOpen }) => isAboutModalOpen 
+);
+
 export const selectIsLeftSidebarOpen = createSelector(
   [selectMenuStore],
   ({ isLeftSidebarOpen }) => isLeftSidebarOpen

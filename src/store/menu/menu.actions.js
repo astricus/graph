@@ -1,6 +1,7 @@
 import menuTypes from './menu.types';
 import { actionCreator } from '../utils';
 import {
+  selectIsAboutModalOpen,
   selectIsDataModalOpen,
   selectIsDefinitionsModalOpen,
   selectIsLeftSidebarOpen,
@@ -24,6 +25,13 @@ export const toggleDefinitionsModal = () => (dispatch, getState) => {
   const isDefinitionsModalOpen = selectIsDefinitionsModalOpen(getState());
   dispatch(
     actionCreator(menuTypes.SET_OPEN_DEFINITIONS_MODAL, !isDefinitionsModalOpen)
+  );
+};
+
+export const toggleAboutModal = () => (dispatch, getState) => {
+  const isAboutModalOpen = selectIsAboutModalOpen(getState());
+  dispatch(
+    actionCreator(menuTypes.SET_OPEN_ABOUT_MODAL, !isAboutModalOpen)
   );
 };
 

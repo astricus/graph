@@ -4,6 +4,7 @@ const initialState = {
   isDataModalOpen: false,
   isSettingsModalOpen: false,
   isDefinitionsModalOpen: false,
+  isAboutModalOpen: false,
   isLeftSidebarOpen: false,
   isRightSidebarOpen: false,
   concepts: {
@@ -36,6 +37,11 @@ const menuReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         isDefinitionsModalOpen: payload,
+      };
+    case menuTypes.SET_OPEN_ABOUT_MODAL:
+      return {
+        ...state,
+        isAboutModalOpen: payload,
       };
     case menuTypes.SET_OPEN_LEFT_SIDEBAR:
       return {

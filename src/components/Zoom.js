@@ -14,7 +14,6 @@ const Zoom = () => {
 
   const handleChange = (e) => {
     const value = e.target.value;
-    console.log(value);
     dispatch(setZoom(value));
   };
   return (
