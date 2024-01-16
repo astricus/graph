@@ -199,3 +199,7 @@ export const increaseAbstractCount = () => (dispatch, getState) => {
     dispatch(actionCreator(dataTypes.SET_ABSTRACT_COUNT, abstractCount + 1));
   }
 };
+
+export const clickNode = (node) => (dispatch) => {
+  dispatch(actionCreator(dataTypes.CLICK_NODE, node));
+}

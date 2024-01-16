@@ -13,7 +13,7 @@ import {
   selectNodes,
   selectPinnedNodesMap,
 } from '../store/data/data.selectors';
-import { setActiveNodes, setPinnedNodes } from '../store/data/data.actions';
+import { clickNode, setActiveNodes, setPinnedNodes } from '../store/data/data.actions';
 import { selectConcepts } from '../store/menu/menu.selectors';
 import { setConcepts } from '../store/menu/menu.actions';
 import { usePagination } from '../hooks/usePagination';
@@ -21,13 +21,15 @@ import { useFilters } from '../hooks/useFilters';
 import Pagination from './Pagination';
 import SidebarSectionHeader from './SidebarSectionHeader';
 
-const Concept = ({ id, name, isPinned = false, isActive = false }) => {
+const Concept = ({ node, isPinned = false, isActive = false }) => {
+  const { id, name } = node;
   const dispatch = useDispatch();
   const togglePinNode = () => {
     dispatch(setPinnedNodes(id));
   };
   const toggleActiveNode = () => {
     dispatch(setActiveNodes(id));
+    dispatch(clickNode(node));
   };
   return (
     <div className='flex w-full items-center'>
@@ -82,14 +84,14 @@ export default function Concepts() {
     return (
       <div className='mb-2 h-60'>
         {slice.length > 0 &&
-          slice.map(({ id, name }) => {
+          slice.map((node) => {
+            const { id } = node;
             const isPinned = pinnedNodes ? pinnedNodes[id] || false : false;
             const isActive = activeNodes ? activeNodes[id] || false : false;
             return (
               <Concept
                 key={id}
-                id={id}
-                name={name}
+                node={node}
                 isActive={isActive}
                 isPinned={isPinned}
               />

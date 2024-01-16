@@ -82,7 +82,7 @@ export default function LoadDataModal() {
           <TextInput
             id='urlData'
             placeholder='Paste the link to the json file here'
-            // value={url}
+            value={url}
             onBlur={onChangeUrl}
             disabled={mode !== 'url'}
           />

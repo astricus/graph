@@ -22,6 +22,7 @@ import { defaultConfig } from './graph.config';
 import ContextMenu from './components/ContextMenu';
 import { selectZoom } from './store/settings/settings.selectors';
 import { setZoom } from './store/settings/settings.actions';
+import { clickNode } from './store/data/data.actions';
 
 // import 'react-toastify/dist/ReactToastify.css';
 // import './styles.css';
@@ -89,7 +90,7 @@ class Sandbox extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { graphData, currentZoom } = this.props;
+    const { graphData, currentZoom, clickedNode } = this.props;
     if (currentZoom !== prevProps.currentZoom) {
       const wheelEvt = document.createEvent('MouseEvent');
       wheelEvt.initEvent('wheel', true, true);
@@ -113,6 +114,15 @@ class Sandbox extends React.Component {
           },
         }));
       }
+    }
+    if (clickedNode !== prevProps.clickedNode) {
+      this.setState({
+        clicked: clickedNode,
+        data: {
+          ...this.state.data,
+          focusedNodeId: this.state.data.focusedNodeId !== clickedNode?.id ? clickedNode?.id || null : null
+        }
+      });
     }
   }
 
@@ -151,13 +161,14 @@ class Sandbox extends React.Component {
 
   onClickNode = (id, node) => {
     // NOTE: below sample implementation for focusAnimation when clicking on node
-    this.setState({
-      clicked: node,
-      data: {
-        ...this.state.data,
-        focusedNodeId: this.state.data.focusedNodeId !== id ? id : null
-      }
-    });
+    this.props.clickNode(node);
+    // this.setState({
+    //   clicked: node,
+    //   data: {
+    //     ...this.state.data,
+    //     focusedNodeId: this.state.data.focusedNodeId !== node.id ? node.id : null
+    //   }
+    // });
   };
 
   onDoubleClickNode = (id, node) => {
@@ -607,10 +618,12 @@ class Sandbox extends React.Component {
 const mapStateToProps = (state) => ({
   graphData: state.data.present.graph,
   currentZoom: selectZoom(state),
+  clickedNode: state.data.present.clickedNode,
 });
 
 const mapDispatchToProps = {
   setZoom,
+  clickNode,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Sandbox);

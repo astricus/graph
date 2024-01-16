@@ -5,6 +5,7 @@ const initialState = {
   loading: false,
   graph: null,
   constraints: [],
+  clickedNode: null,
   abstractCount: 0,
   origin: null,
   pinnedNodes: null,
@@ -91,6 +92,11 @@ const dataReducer = (state = initialState, { type, payload }) => {
       }
     case dataTypes.EXPORT_ORIGIN:
       return state;
+    case dataTypes.CLICK_NODE:
+      return {
+        ...state,
+        clickedNode: payload,
+      };
     default:
       return state;
   }

@@ -36,6 +36,7 @@ const dataTypes = {
   SET_ABSTRACT_COUNT: 'SET_ABSTRACT_COUNT',
 
   EXPORT_ORIGIN: 'EXPORT_ORIGIN',
+  CLICK_NODE: 'CLICK_NODE',
 };
 
 export default dataTypes;
