@@ -1,4 +1,5 @@
 import menuTypes from './menu.types';
+import { cloneDeep } from 'lodash';
 
 const initialState = {
   isDataModalOpen: false,
@@ -21,7 +22,7 @@ const initialState = {
   error: null,
 };
 
-const menuReducer = (state = initialState, { type, payload }) => {
+const menuReducer = (state = cloneDeep(initialState), { type, payload }) => {
   switch (type) {
     case menuTypes.SET_OPEN_DATA_MODAL:
       return {
@@ -68,6 +69,8 @@ const menuReducer = (state = initialState, { type, payload }) => {
         ...state,
         constraints: payload,
       };
+    case menuTypes.SET_MENU_INITIAL_STATE:
+      return cloneDeep(initialState);
     default:
       return state;
   }

@@ -11,14 +11,18 @@ import {
 import { FaUndoAlt, FaRedoAlt } from 'react-icons/fa';
 import { ActionCreators } from 'redux-undo';
 import { useDispatch, useSelector } from 'react-redux';
-import { abstract, exportOrigin } from '../store/data/data.actions';
+import {
+  abstract,
+  exportOrigin,
+  setDataInitialState,
+} from '../store/data/data.actions';
 import {
   selectAbstractCount,
   selectIsRedoDisabled,
   selectIsUndoDisabled,
   selectOrigin,
 } from '../store/data/data.selectors';
-import Zoom from './Zoom';
+// import Zoom from './Zoom';
 import {
   selectIsLeftSidebarOpen,
   selectIsRightSidebarOpen,
@@ -29,9 +33,12 @@ import {
   toggleLeftSidebar,
   toggleRightSidebar,
   setSettingsModal,
+  setMenuInitialState,
 } from '../store/menu/menu.actions';
 import { MAX_ABSTRACT_COUNT } from '../constants';
 import { useCallback } from 'react';
+import { persistor } from '../store';
+import { setSettingsInitialState } from '../store/settings/settings.actions';
 
 export default function Header() {
   const dispatch = useDispatch();
@@ -49,11 +56,11 @@ export default function Header() {
     [dispatch]
   );
   const openSettingsModalOpen = useCallback(
-    () => dispatch(setSettingsModal()),
+    () => dispatch(setSettingsModal(true)),
     [dispatch]
   );
   const openAboutModalOpen = useCallback(
-    () => dispatch(setAboutModal()),
+    () => dispatch(setAboutModal(true)),
     [dispatch]
   );
 
@@ -69,6 +76,22 @@ export default function Header() {
   const onClickRedo = () => {
     if (isRedoDisabled) return;
     dispatch(ActionCreators.redo());
+  };
+
+  const onClickClear = () => {
+    dispatch(setDataInitialState());
+    dispatch(setMenuInitialState());
+    dispatch(setSettingsInitialState());
+    dispatch(ActionCreators.clearHistory());
+    persistor.pause();
+    persistor
+      .flush()
+      .then(() => {
+        return persistor.purge();
+      })
+      .finally(() => {
+        return persistor.persist();
+      });
   };
 
   const onClickExport = () => {
@@ -136,7 +159,7 @@ export default function Header() {
           <HiOutlineInformationCircle className='mr-1 text-base' />
           About
         </Button>
-        <Zoom />
+        {/* <Zoom /> */}
         <Button.Group className='mr-3'>
           <Button
             className='border-0'
@@ -165,12 +188,21 @@ export default function Header() {
               ? 'This models is already a full abstraction'
               : 'Abstract'
           }
-          className='border-0'
+          className='border-0 mr-3'
           size='sm'
           onClick={onClickAbstract}
           disabled={!origin || isAbstractFull}
         >
           Abstract
+        </Button>
+        <Button
+          title='Clear'
+          className='border-0'
+          size='sm'
+          onClick={onClickClear}
+          // disabled={!origin || isAbstractFull}
+        >
+          Clear
         </Button>
       </div>
       <div className='flex md:order-2'>

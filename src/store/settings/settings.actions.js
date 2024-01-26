@@ -30,3 +30,7 @@ export const setShowColor = (showColor) => (dispatch) => {
 export const setSelectionColor = (selectionColor) => (dispatch) => {
   dispatch(actionCreator(settingsTypes.SET_SELECTION_COLOR, selectionColor));
 };
+
+export const setSettingsInitialState = () => (dispatch) => {
+  dispatch(actionCreator(settingsTypes.SET_SETTINGS_INITIAL_STATE));
+};

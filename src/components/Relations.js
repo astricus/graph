@@ -59,7 +59,7 @@ export default function Relations() {
   }, [slice, showStereotype]);
 
   return (
-    <div>
+    <div className='mt-auto'>
       <SidebarSectionHeader
         section='Relations'
         sort={sort}

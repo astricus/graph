@@ -1,8 +1,9 @@
 import settingsTypes from './settings.types';
+import { cloneDeep } from 'lodash';
 
 const initialState = {
   zoom: 1,
-  hop: 2,
+  hop: 1,
   definitionsNumber: 3,
   abstractType: 'kind', // or 'topConcept'
   showStereotype: false,
@@ -10,7 +11,10 @@ const initialState = {
   selectionColor: '#ff0000',
 };
 
-const settingsReducer = (state = initialState, { type, payload }) => {
+const settingsReducer = (
+  state = cloneDeep(initialState),
+  { type, payload }
+) => {
   switch (type) {
     case settingsTypes.SET_ZOOM:
       return {
@@ -47,6 +51,8 @@ const settingsReducer = (state = initialState, { type, payload }) => {
         ...state,
         selectionColor: payload,
       };
+    case settingsTypes.SET_SETTINGS_INITIAL_STATE:
+      return cloneDeep(initialState);
     default:
       return state;
   }

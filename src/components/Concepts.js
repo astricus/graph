@@ -13,22 +13,26 @@ import {
   selectNodes,
   selectPinnedNodesMap,
 } from '../store/data/data.selectors';
-import { clickNode, setActiveNodes, setPinnedNodes } from '../store/data/data.actions';
+import {
+  clickNode,
+  /* setActiveNodes, */ setPinnedNodes,
+} from '../store/data/data.actions';
 import { selectConcepts } from '../store/menu/menu.selectors';
 import { setConcepts } from '../store/menu/menu.actions';
 import { usePagination } from '../hooks/usePagination';
 import { useFilters } from '../hooks/useFilters';
 import Pagination from './Pagination';
 import SidebarSectionHeader from './SidebarSectionHeader';
+import { useCallback } from 'react';
 
 const Concept = ({ node, isPinned = false, isActive = false }) => {
   const { id, name } = node;
   const dispatch = useDispatch();
-  const togglePinNode = () => {
+  const togglePinNode = useCallback(() => {
     dispatch(setPinnedNodes(id));
-  };
+  }, [dispatch, id]);
   const toggleActiveNode = () => {
-    dispatch(setActiveNodes(id));
+    // dispatch(setActiveNodes(id));
     dispatch(clickNode(node));
   };
   return (

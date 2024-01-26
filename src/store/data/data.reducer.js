@@ -1,5 +1,6 @@
 import { genId } from '../../utils';
 import dataTypes from './data.types';
+import { cloneDeep } from 'lodash';
 
 const initialState = {
   loading: false,
@@ -14,7 +15,7 @@ const initialState = {
   error: null,
 };
 
-const dataReducer = (state = initialState, { type, payload }) => {
+const dataReducer = (state = cloneDeep(initialState), { type, payload }) => {
   switch (type) {
     case dataTypes.REQUEST_LOAD:
     case dataTypes.REQUEST_FOCUS:
@@ -97,6 +98,8 @@ const dataReducer = (state = initialState, { type, payload }) => {
         ...state,
         clickedNode: payload,
       };
+    case dataTypes.SET_DATA_INITIAL_STATE:
+      return cloneDeep(initialState);
     default:
       return state;
   }

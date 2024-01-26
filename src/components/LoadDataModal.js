@@ -17,7 +17,8 @@ export default function LoadDataModal() {
   const [file, setFile] = useState(null);
   const [mode, setMode] = useState('url'); // or 'file'
   const [url, setUrl] = useState(
-    'https://raw.githubusercontent.com/OntoUML/ontouml-models/master/models/abrahao2018agriculture-operations/ontology.json'
+    ''
+    // 'https://raw.githubusercontent.com/OntoUML/ontouml-models/master/models/abrahao2018agriculture-operations/ontology.json'
   );
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
@@ -73,7 +74,6 @@ export default function LoadDataModal() {
           <div className='flex items-center gap-2 mb-2'>
             <Radio
               name='mode-url'
-              value='USA'
               checked={mode === 'url'}
               onChange={() => setMode('url')}
             />
@@ -82,7 +82,7 @@ export default function LoadDataModal() {
           <TextInput
             id='urlData'
             placeholder='Paste the link to the json file here'
-            value={url}
+            // value={url}
             onBlur={onChangeUrl}
             disabled={mode !== 'url'}
           />

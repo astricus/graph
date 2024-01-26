@@ -41,3 +41,6 @@ export const setRelations = (payload) => (dispatch) =>
 
 export const setConstraints = (payload) => (dispatch) =>
   dispatch(actionCreator(menuTypes.SET_CONSTRAINTS_FILTERS, payload));
+
+export const setMenuInitialState = () => (dispatch) =>
+  dispatch(actionCreator(menuTypes.SET_MENU_INITIAL_STATE));

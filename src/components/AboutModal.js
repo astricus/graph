@@ -48,7 +48,7 @@ export default function AboutModal() {
           </a>
         </p>
         <p className='mb-3'>
-          If you would like to cite, this work, please, refer to the PURL{' '}
+          If you would like to cite this work, please refer to the PURL{' '}
           <a
             className='text-blue-700'
             href='https://w3id.org/ExpO'

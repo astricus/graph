@@ -180,7 +180,7 @@ export const define = (nodeName) => async (dispatch, getState) => {
       number_of_def: numberOfDef,
     });
     dispatch(actionCreator(dataTypes.SUCCESS_DEFINE, definitions));
-    dispatch(setDefinitionsModal(false));
+    dispatch(setDefinitionsModal(true));
     return true;
   } catch (error) {
     console.error(error);
@@ -189,7 +189,7 @@ export const define = (nodeName) => async (dispatch, getState) => {
   }
 };
 
-export const clearAbstractCount = () => (dispatch, getState) => {
+export const clearAbstractCount = () => (dispatch) => {
   dispatch(actionCreator(dataTypes.SET_ABSTRACT_COUNT, 0));
 };
 
@@ -203,3 +203,7 @@ export const increaseAbstractCount = () => (dispatch, getState) => {
 export const clickNode = (node) => (dispatch) => {
   dispatch(actionCreator(dataTypes.CLICK_NODE, node));
 }
+
+export const setDataInitialState = () => (dispatch) => {
+  dispatch(actionCreator(dataTypes.SET_DATA_INITIAL_STATE));
+};

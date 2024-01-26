@@ -1,7 +1,14 @@
 import React from 'react';
 import { ListGroup } from 'flowbite-react';
 import { useDispatch } from 'react-redux';
-import { cluster, define, expand, focus, remove } from '../store/data/data.actions';
+import {
+  cluster,
+  define,
+  expand,
+  focus,
+  fold,
+  remove,
+} from '../store/data/data.actions';
 
 const ContextMenu = ({ x, y, node = null }) => {
   const dispatch = useDispatch();
@@ -35,6 +42,11 @@ const ContextMenu = ({ x, y, node = null }) => {
     dispatch(cluster(nodeId));
   };
 
+  const onFold = () => {
+    if (!nodeId) return;
+    dispatch(fold(nodeId));
+  };
+
   return (
     <div style={{ top: y, left: x }} className='absolute w-48'>
       <ListGroup>
@@ -43,6 +55,7 @@ const ContextMenu = ({ x, y, node = null }) => {
         <ListGroup.Item onClick={onExpand}>Expand</ListGroup.Item>
         <ListGroup.Item onClick={onFocus}>Focus</ListGroup.Item>
         <ListGroup.Item onClick={onCluster}>Cluster</ListGroup.Item>
+        <ListGroup.Item onClick={onFold}>Fold</ListGroup.Item>
       </ListGroup>
     </div>
   );
