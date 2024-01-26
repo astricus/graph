@@ -2,7 +2,7 @@
 import { Modal, Button, Label, Radio, Checkbox, Select } from 'flowbite-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsSettingsModalOpen } from '../store/menu/menu.selectors';
-import { toggleSettingsModal } from '../store/menu/menu.actions';
+import { setSettingsModal } from '../store/menu/menu.actions';
 import { selectSettings } from '../store/settings/settings.selectors';
 import {
   setAbstractType,
@@ -10,6 +10,7 @@ import {
   setHop,
 } from '../store/settings/settings.actions';
 import { setShowStereotype } from '../store/settings/settings.actions';
+import { useCallback } from 'react';
 
 export default function SettingsModal() {
   const dispatch = useDispatch();
@@ -25,7 +26,7 @@ export default function SettingsModal() {
   } = settings;
 
   const show = useSelector(selectIsSettingsModalOpen);
-  const onClose = () => dispatch(toggleSettingsModal());
+  const onClose = useCallback(() => dispatch(setSettingsModal(false)), [dispatch]);
 
   const changeShowStereotype = () => {
     dispatch(setShowStereotype(!showStereotype));

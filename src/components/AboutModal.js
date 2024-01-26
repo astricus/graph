@@ -1,13 +1,17 @@
 import { Modal, Button } from 'flowbite-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsAboutModalOpen } from '../store/menu/menu.selectors';
-import { toggleAboutModal } from '../store/menu/menu.actions';
+import { setAboutModal } from '../store/menu/menu.actions';
+import { useCallback } from 'react';
 
 export default function AboutModal() {
   const dispatch = useDispatch();
 
   const show = useSelector(selectIsAboutModalOpen);
-  const onClose = () => dispatch(toggleAboutModal());
+  const onClose = useCallback(
+    () => dispatch(setAboutModal(false)),
+    [dispatch]
+  );
 
   const closeModal = () => {
     onClose();
@@ -18,9 +22,11 @@ export default function AboutModal() {
       <Modal.Header className='p-5'>About</Modal.Header>
       <Modal.Body>
         <p className='mb-3'>
-          ExpO: A Framework for Explaining Ontology-Driven Conceptual Models.
+          ExpO: An Approach Towards Explaining Ontology-Driven Conceptual Models
         </p>
-        <p className='mb-3'>Idea: Elena Romanenko, Diego Calvanese, Giancarlo Guizzardi</p>
+        <p className='mb-3'>
+          Idea: Elena Romanenko, Diego Calvanese, Giancarlo Guizzardi
+        </p>
         <p className='mb-3'>
           Developers:{' '}
           <a
@@ -45,15 +51,15 @@ export default function AboutModal() {
           If you would like to cite, this work, please, refer to the PURL{' '}
           <a
             className='text-blue-700'
-            href='https://pul.org/expo'
+            href='https://w3id.org/ExpO'
             rel='noopener noreferrer'
             target='_blank'
           >
-            https://pul.org/expo
+            https://w3id.org/ExpO
           </a>{' '}
           and cite the paper: Romanenko, E., Calvanese, D., Guizzardi, G.: ExpO:
-          A Framework for Explaining Ontology-Driven Conceptual Models. (2023)
-          Manuscript submitted for publication.
+          An Approach Towards Explaining Ontology-Driven Conceptual Models.
+          (2024) Manuscript submitted for publication.
         </p>
       </Modal.Body>
       <Modal.Footer>

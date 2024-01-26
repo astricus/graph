@@ -11,7 +11,7 @@ import {
 import { selectHop } from '../settings/settings.selectors';
 import { selectDefinitionsNumber } from '../settings/settings.selectors';
 import {
-  toggleDefinitionsModal,
+  setDefinitionsModal,
 } from '../menu/menu.actions';
 import { MAX_ABSTRACT_COUNT } from '../../constants';
 
@@ -180,7 +180,7 @@ export const define = (nodeName) => async (dispatch, getState) => {
       number_of_def: numberOfDef,
     });
     dispatch(actionCreator(dataTypes.SUCCESS_DEFINE, definitions));
-    dispatch(toggleDefinitionsModal());
+    dispatch(setDefinitionsModal(false));
     return true;
   } catch (error) {
     console.error(error);

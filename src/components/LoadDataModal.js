@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import {
   Modal,
   Button,
@@ -11,7 +11,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { load } from '../store/data/data.actions';
 import { selectIsDataModalOpen } from '../store/menu/menu.selectors';
-import { toggleDataModal } from '../store/menu/menu.actions';
+import { setDataModal } from '../store/menu/menu.actions';
 
 export default function LoadDataModal() {
   const [file, setFile] = useState(null);
@@ -23,7 +23,7 @@ export default function LoadDataModal() {
   const dispatch = useDispatch();
 
   const show = useSelector(selectIsDataModalOpen);
-  const onClose = () => dispatch(toggleDataModal());
+  const onClose = useCallback(() => dispatch(setDataModal(false)), [dispatch]);
 
   const onChangeUrl = (event) => {
     const { value } = event.target;

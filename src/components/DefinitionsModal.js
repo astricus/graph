@@ -2,7 +2,7 @@
 import { Modal, Button } from 'flowbite-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsDefinitionsModalOpen } from '../store/menu/menu.selectors';
-import { toggleDefinitionsModal } from '../store/menu/menu.actions';
+import { setDefinitionsModal } from '../store/menu/menu.actions';
 import { selectDefinitions, selectDefinitionsConcept } from '../store/data/data.selectors';
 
 export default function DefinitionsModal() {
@@ -12,7 +12,7 @@ export default function DefinitionsModal() {
   const definitions = useSelector(selectDefinitions);
 
   const show = useSelector(selectIsDefinitionsModalOpen);
-  const onClose = () => dispatch(toggleDefinitionsModal());
+  const onClose = () => dispatch(setDefinitionsModal());
 
   const closeModal = () => {
     onClose();

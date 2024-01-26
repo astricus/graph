@@ -24,27 +24,38 @@ import {
   selectIsRightSidebarOpen,
 } from '../store/menu/menu.selectors';
 import {
-  toggleAboutModal,
-  toggleDataModal,
+  setAboutModal,
+  setDataModal,
   toggleLeftSidebar,
   toggleRightSidebar,
-  toggleSettingsModal,
+  setSettingsModal,
 } from '../store/menu/menu.actions';
 import { MAX_ABSTRACT_COUNT } from '../constants';
+import { useCallback } from 'react';
 
 export default function Header() {
   const dispatch = useDispatch();
 
   const openLeft = useSelector(selectIsLeftSidebarOpen);
   const openRight = useSelector(selectIsRightSidebarOpen);
-  const isAbstractFull = useSelector(selectAbstractCount) === MAX_ABSTRACT_COUNT;
+  const isAbstractFull =
+    useSelector(selectAbstractCount) === MAX_ABSTRACT_COUNT;
 
   const toggleOpenLeft = () => dispatch(toggleLeftSidebar());
   const toggleOpenRight = () => dispatch(toggleRightSidebar());
 
-  const toggleDataLoadModal = () => dispatch(toggleDataModal());
-  const toggleSettingsModalOpen = () => dispatch(toggleSettingsModal());
-  const toggleAboutModalOpen = () => dispatch(toggleAboutModal());
+  const openDataLoadModal = useCallback(
+    () => dispatch(setDataModal(true)),
+    [dispatch]
+  );
+  const openSettingsModalOpen = useCallback(
+    () => dispatch(setSettingsModal()),
+    [dispatch]
+  );
+  const openAboutModalOpen = useCallback(
+    () => dispatch(setAboutModal()),
+    [dispatch]
+  );
 
   const isUndoDisabled = useSelector(selectIsUndoDisabled);
   const isRedoDisabled = useSelector(selectIsRedoDisabled);
@@ -93,7 +104,7 @@ export default function Header() {
         {openLeft ? <RxCross1 /> : <RxHamburgerMenu />}
       </Button>
       <div className='flex min-w-fit w-6/12'>
-        <Button className='mr-3 border-0' size='sm' onClick={toggleDataLoadModal}>
+        <Button className='mr-3 border-0' size='sm' onClick={openDataLoadModal}>
           <HiOutlineDownload className='mr-1 text-base' />
           Load
         </Button>
@@ -111,7 +122,7 @@ export default function Header() {
           className='mr-3 border-0'
           color='light'
           size='sm'
-          onClick={toggleSettingsModalOpen}
+          onClick={openSettingsModalOpen}
         >
           <HiOutlineAdjustments className='mr-1 text-base' />
           Settings
@@ -120,7 +131,7 @@ export default function Header() {
           className='mr-3 border-0'
           color='light'
           size='sm'
-          onClick={toggleAboutModalOpen}
+          onClick={openAboutModalOpen}
         >
           <HiOutlineInformationCircle className='mr-1 text-base' />
           About
@@ -149,7 +160,11 @@ export default function Header() {
           </Button>
         </Button.Group>
         <Button
-          title={isAbstractFull ? 'This models is already a full abstraction' : 'Abstract'}
+          title={
+            isAbstractFull
+              ? 'This models is already a full abstraction'
+              : 'Abstract'
+          }
           className='border-0'
           size='sm'
           onClick={onClickAbstract}
