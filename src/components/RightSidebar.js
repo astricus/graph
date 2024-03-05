@@ -24,7 +24,7 @@ export default function RightSidebar() {
           <Constraints />
         </div>
         <Button
-          className='absolute top-4 -left-12 border-0'
+          className='absolute top-24 -left-12 border-0'
           color='light'
           size='sm'
           onClick={toggleOpenRight}

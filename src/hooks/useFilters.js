@@ -72,5 +72,5 @@ export const useFilters = (array, config, searchKey = 'name') => {
           }
         )
       : [];
-  }, [sortedArr, search]);
+  }, [sortedArr, search, searchKey]);
 };

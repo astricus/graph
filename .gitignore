@@ -22,3 +22,7 @@ graph.zip
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+
+# Contentlayer
+.contentlayer

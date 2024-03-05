@@ -40,6 +40,7 @@ export default function LoadDataModal() {
 
   const closeModal = () => {
     setFile(null);
+    setUrl('');
     onClose();
   };
 
@@ -82,8 +83,8 @@ export default function LoadDataModal() {
           <TextInput
             id='urlData'
             placeholder='Paste the link to the json file here'
-            // value={url}
-            onBlur={onChangeUrl}
+            value={url}
+            onChange={onChangeUrl}
             disabled={mode !== 'url'}
           />
         </div>
@@ -100,6 +101,7 @@ export default function LoadDataModal() {
             id='file'
             accept='.json'
             onChange={onChangeFile}
+            files={file ? [file] : []}
             disabled={mode !== 'file'}
           />
         </div>

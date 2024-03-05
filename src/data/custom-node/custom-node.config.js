@@ -1,7 +1,7 @@
 import React from "react";
 import CustomNode from "./CustomNode";
 
-export default {
+const config = {
   automaticRearrangeAfterDropNode: false,
   collapsible: false,
   height: 400,
@@ -47,3 +47,5 @@ export default {
     highlightColor: "blue",
   },
 };
+
+export default config;
