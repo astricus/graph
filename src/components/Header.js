@@ -1,6 +1,5 @@
 import { Button, Navbar } from 'flowbite-react';
 import cn from 'clsx';
-import { RxHamburgerMenu, RxCross1 } from 'react-icons/rx';
 import React from 'react';
 import {
   HiOutlineAdjustments,
@@ -22,7 +21,6 @@ import {
   selectIsUndoDisabled,
   selectOrigin,
 } from '../store/data/data.selectors';
-// import Zoom from './Zoom';
 import {
   selectIsLeftSidebarOpen,
   selectIsRightSidebarOpen,
@@ -30,8 +28,6 @@ import {
 import {
   setAboutModal,
   setDataModal,
-  toggleLeftSidebar,
-  toggleRightSidebar,
   setSettingsModal,
   setMenuInitialState,
 } from '../store/menu/menu.actions';
@@ -47,9 +43,6 @@ export default function Header() {
   const openRight = useSelector(selectIsRightSidebarOpen);
   const isAbstractFull =
     useSelector(selectAbstractCount) === MAX_ABSTRACT_COUNT;
-
-  const toggleOpenLeft = () => dispatch(toggleLeftSidebar());
-  const toggleOpenRight = () => dispatch(toggleRightSidebar());
 
   const openDataLoadModal = useCallback(
     () => dispatch(setDataModal(true)),
@@ -109,24 +102,17 @@ export default function Header() {
       fluid={true}
       rounded={true}
       className={cn(
-        'absolute top-0 left-0 right-0 transition-spacing shadow-sm h-16 py-3',
+        'absolute top-0 left-0 right-0 transition-all shadow-sm h-16 py-3 opacity-100',
         {
-          'ml-0': !openLeft,
-          'ml-64': openLeft,
-          'mr-0': !openRight,
-          'mr-96': openRight,
+          // 'ml-0': !openLeft,
+          // 'ml-64': openLeft,
+          // 'mr-0': !openRight,
+          // 'mr-96': openRight,
+          'opacity-20 pointer-events-none': openLeft || openRight,
         }
       )}
     >
-      <Button
-        className='mr-3 border-0'
-        color='light'
-        size='sm'
-        onClick={toggleOpenLeft}
-      >
-        {openLeft ? <RxCross1 /> : <RxHamburgerMenu />}
-      </Button>
-      <div className='flex min-w-fit w-6/12'>
+      <div className='flex min-w-fit w-6/12 mx-auto'>
         <Button className='mr-3 border-0' size='sm' onClick={openDataLoadModal}>
           <HiOutlineDownload className='mr-1 text-base' />
           Load
@@ -159,7 +145,6 @@ export default function Header() {
           <HiOutlineInformationCircle className='mr-1 text-base' />
           About
         </Button>
-        {/* <Zoom /> */}
         <Button.Group className='mr-3'>
           <Button
             className='border-0'
@@ -200,22 +185,13 @@ export default function Header() {
           className='border-0'
           size='sm'
           onClick={onClickClear}
-          // disabled={!origin || isAbstractFull}
         >
           Clear
         </Button>
       </div>
-      <div className='flex md:order-2'>
-        <Button
-          className='border-0'
-          color='light'
-          size='sm'
-          onClick={toggleOpenRight}
-        >
-          {openRight ? <RxCross1 /> : <RxHamburgerMenu />}
-        </Button>
+      {/* <div className='flex md:order-2'>
         <Navbar.Toggle />
-      </div>
+      </div> */}
     </Navbar>
   );
 }

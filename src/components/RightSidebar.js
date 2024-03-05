@@ -1,10 +1,15 @@
 import cn from 'clsx';
 import Constraints from './Constraints';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectIsRightSidebarOpen } from '../store/menu/menu.selectors';
+import { toggleRightSidebar } from '../store/menu/menu.actions';
+import { RxCross1, RxHamburgerMenu } from 'react-icons/rx';
+import { Button } from 'flowbite-react';
 
 export default function RightSidebar() {
+  const dispatch = useDispatch();
   const open = useSelector(selectIsRightSidebarOpen);
+  const toggleOpenRight = () => dispatch(toggleRightSidebar());
   return (
     <div>
       <aside
@@ -18,6 +23,14 @@ export default function RightSidebar() {
         <div className='overflow-y-auto py-5 px-3 h-full bg-white border-l border-gray-200 dark:bg-gray-800 dark:border-gray-700'>
           <Constraints />
         </div>
+        <Button
+          className='absolute top-4 -left-12 border-0'
+          color='light'
+          size='sm'
+          onClick={toggleOpenRight}
+        >
+          {open ? <RxCross1 /> : <RxHamburgerMenu />}
+        </Button>
       </aside>
     </div>
   );
