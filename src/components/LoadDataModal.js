@@ -17,8 +17,8 @@ export default function LoadDataModal() {
   const [file, setFile] = useState(null);
   const [mode, setMode] = useState('url'); // or 'file'
   const [url, setUrl] = useState(
-    ''
-    // 'https://raw.githubusercontent.com/OntoUML/ontouml-models/master/models/abrahao2018agriculture-operations/ontology.json'
+    // ''
+    'https://raw.githubusercontent.com/OntoUML/ontouml-models/master/models/abrahao2018agriculture-operations/ontology.json'
   );
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();

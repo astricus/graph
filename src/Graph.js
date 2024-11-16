@@ -8,7 +8,7 @@ import React from 'react';
 import { toast } from 'react-toastify';
 import cn from 'clsx';
 // import defaultConfig from 'react-d3-graph/src/components/graph/graph.config';
-import { Graph } from 'react-d3-graph';
+import { Graph } from './graph/index';
 // import { select } from 'd3-selection';
 import {
   genId,
@@ -47,7 +47,7 @@ class Sandbox extends React.Component {
   constructor(props) {
     super(props);
 
-    const { config: configOverride /*, data, fullscreen */} = sandboxData;
+    const { config: configOverride /*, data, fullscreen */ } = sandboxData;
     const config = Object.assign(defaultConfig, configOverride);
     // TODO: refactor this labelPosition assignment, move to somewhere
     // in generateFormSchema
