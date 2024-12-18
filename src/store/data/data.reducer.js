@@ -6,6 +6,7 @@ const initialState = {
   loading: false,
   graph: null,
   constraints: [],
+  questions: [],
   clickedNode: null,
   abstractCount: 0,
   origin: null,

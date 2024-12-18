@@ -46,3 +46,8 @@ export const selectConstaintFilters = createSelector(
   [selectMenuStore],
   ({ constraints }) => constraints
 );
+
+export const selectQuestionsFilters = createSelector(
+  [selectMenuStore],
+  ({ questions }) => questions
+);

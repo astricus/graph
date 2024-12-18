@@ -19,6 +19,9 @@ const initialState = {
   constraints: {
     search: '',
   },
+  questions: {
+    search: '',
+  },
   error: null,
 };
 

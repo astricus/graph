@@ -17,6 +17,11 @@ export const selectConstraints = createSelector(
   ({ constraints }) => constraints
 );
 
+export const selectQuestions = createSelector(
+  [selectDataStore],
+  ({ questions }) => questions
+);
+
 export const selectNodes = createSelector([selectGraph], (graph) =>
   graph ? graph.nodes : []
 );
