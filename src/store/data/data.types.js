@@ -42,6 +42,9 @@ const dataTypes = {
 
   EXPORT_ORIGIN: 'EXPORT_ORIGIN',
   CLICK_NODE: 'CLICK_NODE',
+  ASPECTS: 'aspects',
+  HIERARCHY: 'hierarchy',
+  PARTHOOD: 'parthood',
 };
 
 export default dataTypes;

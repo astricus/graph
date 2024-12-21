@@ -59,7 +59,7 @@ export default function SettingsModal() {
           />
           <Label htmlFor='promotion'>Show stereotype</Label>
         </div>
-        <div className='mb-10'>
+        {/* <div className='mb-10'>
           <div className='flex items-center gap-2 mb-2'>
             <Radio
               name='abstractType'
@@ -76,7 +76,7 @@ export default function SettingsModal() {
             />
             <Label>Abstract to the top concept</Label>
           </div>
-        </div>
+        </div> */}
         <div className='flex gap-x-4 w-full'>
           <div className='w-full'>
             <div className='mb-2 block'>

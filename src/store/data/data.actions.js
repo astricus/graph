@@ -135,23 +135,23 @@ export const fold = (nodeId) => async (dispatch, getState) => {
   }
 };
 
-export const abstract = () => async (dispatch, getState) => {
+export const abstract = (abstractType) => async (dispatch, getState) => {
   try {
     dispatch(actionCreator(dataTypes.REQUEST_ABSTRACT));
-    const abstractCount = selectAbstractCount(getState());
-    let abstractType = '';
-    switch (abstractCount) {
-      case 1:
-        abstractType = 'parthood';
-        break;
-      case 2:
-        abstractType = 'hierarchy';
-        break;
-      default:
-        abstractType = 'aspects';
-    }
+    // const abstractCount = selectAbstractCount(getState());
+    // let abstractType;
+    // switch (abstractCount) {
+    //   case 1:
+    //     abstractType = 'parthood';
+    //     break;
+    //   case 2:
+    //     abstractType = 'hierarchy';
+    //     break;
+    //   default:
+    //     abstractType = 'aspects';
+    // }
     const origin = selectOrigin(getState());
-    const graphData = await api.abstract({ origin, abs_type: [abstractType] });
+    const graphData = await api.abstract({ origin, abs_type: abstractType ? [abstractType] : undefined });
     dispatch(actionCreator(dataTypes.SUCCESS_ABSTRACT, graphData));
     dispatch(increaseAbstractCount());
     return true;

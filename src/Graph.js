@@ -99,6 +99,16 @@ class Sandbox extends React.Component {
     //   const graphEl = document.querySelector('#graph-graph-wrapper');
     //   graphEl.dispatchEvent(wheelEvt);
     // }
+    if (!graphData && this.state.data.nodes.length > 0) {
+      this.setState((state) => ({
+        ...state,
+        data: {
+          id: genId(),
+          nodes: [],
+          links: [],
+        },
+      }));
+    }
     if (graphData !== prevProps.graphData) {
       if (graphData?.nodes?.length > 0 && graphData?.links?.length > 0) {
         this.setState((state) => ({
