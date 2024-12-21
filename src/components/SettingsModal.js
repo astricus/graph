@@ -1,11 +1,11 @@
 // import { useState } from 'react';
-import { Modal, Button, Label, Radio, Checkbox, Select } from 'flowbite-react';
+import { Modal, Button, Label, /* Radio, */ Checkbox, Select } from 'flowbite-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsSettingsModalOpen } from '../store/menu/menu.selectors';
 import { setSettingsModal } from '../store/menu/menu.actions';
 import { selectSettings } from '../store/settings/settings.selectors';
 import {
-  setAbstractType,
+  // setAbstractType,
   setDefinitionsNumber,
   setHop,
 } from '../store/settings/settings.actions';
@@ -19,7 +19,7 @@ export default function SettingsModal() {
   const {
     hop,
     definitionsNumber,
-    abstractType,
+    // abstractType,
     showStereotype,
     // showColor,
     // selectionColor,

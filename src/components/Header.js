@@ -33,7 +33,7 @@ import {
 } from '../store/menu/menu.actions';
 import { MAX_ABSTRACT_COUNT } from '../constants';
 import { useCallback } from 'react';
-import { persistor } from '../store';
+// import { persistor } from '../store';
 import { setSettingsInitialState } from '../store/settings/settings.actions';
 import dataTypes from '../store/data/data.types';
 
@@ -77,15 +77,15 @@ export default function Header() {
     dispatch(setMenuInitialState());
     dispatch(setSettingsInitialState());
     dispatch(ActionCreators.clearHistory());
-    persistor.pause();
-    persistor
-      .flush()
-      .then(() => {
-        return persistor.purge();
-      })
-      .finally(() => {
-        return persistor.persist();
-      });
+    // persistor.pause();
+    // persistor
+    //   .flush()
+    //   .then(() => {
+    //     return persistor.purge();
+    //   })
+    //   .finally(() => {
+    //     return persistor.persist();
+    //   });
   };
 
   const onClickExport = () => {
