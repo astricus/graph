@@ -5,6 +5,7 @@ import { selectIsRightSidebarOpen } from '../store/menu/menu.selectors';
 import { toggleRightSidebar } from '../store/menu/menu.actions';
 import { RxCross1, RxHamburgerMenu } from 'react-icons/rx';
 import { Button } from 'flowbite-react';
+import Questions from './Questions';
 
 export default function RightSidebar() {
   const dispatch = useDispatch();
@@ -21,11 +22,11 @@ export default function RightSidebar() {
         aria-label='Sidenav'
       >
         <div className='overflow-y-auto py-5 px-3 h-full bg-white border-l border-gray-200 dark:bg-gray-800 dark:border-gray-700'>
+          <Questions />
           <Constraints />
         </div>
         <Button
-          className='absolute top-24 -left-12 border-0'
-          color='light'
+          className='absolute top-24 -left-12'
           size='sm'
           onClick={toggleOpenRight}
         >

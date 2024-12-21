@@ -23,7 +23,7 @@ import { defaultConfig } from './graph.config';
 import ContextMenu from './components/ContextMenu';
 import { selectZoom } from './store/settings/settings.selectors';
 import { setZoom } from './store/settings/settings.actions';
-import { clickNode } from './store/data/data.actions';
+import { clickNode, explore } from './store/data/data.actions';
 
 // import 'react-toastify/dist/ReactToastify.css';
 // import './styles.css';
@@ -172,6 +172,7 @@ class Sandbox extends React.Component {
   onClickNode = (id, node) => {
     // NOTE: below sample implementation for focusAnimation when clicking on node
     this.props.clickNode(node);
+    this.props.explore(id);
     // this.setState({
     //   clicked: node,
     //   data: {
@@ -645,6 +646,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   setZoom,
   clickNode,
+  explore,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Sandbox);

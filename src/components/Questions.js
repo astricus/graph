@@ -10,10 +10,11 @@ import { usePagination } from '../hooks/usePagination';
 import { useFilters } from '../hooks/useFilters';
 import Pagination from './Pagination';
 
-const Question = ({ question }) => {
+const Question = ({ question, answer }) => {
   return (
-    <div className='flex w-full items-center'>
-      <p className='mr-2 mb-2'>{question}</p>
+    <div className='flex flex-col w-full'>
+      <p className='mr-2 mb-1'>{question}</p>
+      <i className='mr-1 mb-2'>{answer}</i>
     </div>
   );
 };
@@ -41,7 +42,7 @@ export default function Questions() {
       <div className='mb-2 max-h-full overflow-auto'>
         {slice.length > 0 &&
           slice.map((question) => (
-            <Question key={question} question={question} />
+            <Question key={question} question={question?.Question || ''} answer={question?.Answer || ''} />
           ))}
       </div>
     );
@@ -50,13 +51,13 @@ export default function Questions() {
   return (
     <div className='flex flex-col h-full'>
       <div className='flex mb-3'>
-        <b>Constraints</b>
+        <b>Questions</b>
       </div>
       <TextInput
         className='mb-2'
         type='search'
         icon={HiSearch}
-        placeholder='Quick search for constraint'
+        placeholder='Quick search for question'
         value={search}
         onChange={handleChangeSearch}
       />

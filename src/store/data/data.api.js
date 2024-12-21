@@ -136,3 +136,16 @@ export const abstract = async (data = {}) => {
   });
   return response?.data || {};
 };
+
+/**
+ * Expore graphs
+ * @param {object} data 
+ * @returns 
+ */
+export const explore = async (data) => {
+  const response = await graphApi.post({
+    endpoint: 'explore',
+    data,
+  });
+  return response?.data || {};
+}

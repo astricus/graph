@@ -26,8 +26,7 @@ export default function LeftSidebar() {
           <Relations />
         </div>
         <Button
-          className="absolute top-24 -right-12 border-0"
-          color="light"
+          className="absolute top-24 -right-12"
           size="sm"
           onClick={toggleOpenLeft}
         >

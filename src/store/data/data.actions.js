@@ -12,8 +12,10 @@ import { selectHop } from '../settings/settings.selectors';
 import { selectDefinitionsNumber } from '../settings/settings.selectors';
 import {
   setDefinitionsModal,
+  toggleRightSidebar,
 } from '../menu/menu.actions';
 import { MAX_ABSTRACT_COUNT } from '../../constants';
+import { selectIsRightSidebarOpen } from '../menu/menu.selectors';
 
 export const load = (formData) => async (dispatch) => {
   try {
@@ -40,6 +42,26 @@ export const focus = (nodeId) => async (dispatch, getState) => {
   } catch (error) {
     console.error(error);
     dispatch(actionCreator(dataTypes.FAILURE_FOCUS, error));
+    return false;
+  }
+};
+
+export const explore = (nodeId) => async (dispatch, getState) => {
+  try {
+    dispatch(actionCreator(dataTypes.REQUEST_EXPLORE));
+    const origin = selectOrigin(getState());
+    const data = await api.explore({ origin, node: nodeId });
+    if (data.questions) {
+      dispatch(actionCreator(dataTypes.SUCCESS_EXPLORE, data.questions));
+      const isRightSidebarOpen = selectIsRightSidebarOpen(getState());
+      if (!isRightSidebarOpen && data.questions.length > 0) { 
+        dispatch(toggleRightSidebar());
+      }
+    }
+    return true;
+  } catch (error) {
+    console.error(error);
+    dispatch(actionCreator(dataTypes.FAILURE_EXPLORE, error));
     return false;
   }
 };

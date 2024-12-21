@@ -25,6 +25,7 @@ const dataReducer = (state = cloneDeep(initialState), { type, payload }) => {
     case dataTypes.REQUEST_EXPAND:
     case dataTypes.REQUEST_FOLD:
     case dataTypes.REQUEST_ABSTRACT:
+    case dataTypes.REQUEST_EXPLORE:
       return {
         ...state,
         error: null,
@@ -54,10 +55,16 @@ const dataReducer = (state = cloneDeep(initialState), { type, payload }) => {
     case dataTypes.FAILURE_EXPAND:
     case dataTypes.FAILURE_FOLD:
     case dataTypes.FAILURE_ABSTRACT:
+    case dataTypes.FAILURE_EXPLORE:
       return {
         ...state,
         error: payload,
         loading: false,
+      };
+    case dataTypes.SUCCESS_EXPLORE:
+      return {
+        ...state,
+        questions: payload,
       };
     case dataTypes.SET_ABSTRACT_COUNT:
       return {
