@@ -12,6 +12,7 @@ import { selectHop } from '../settings/settings.selectors';
 import { selectDefinitionsNumber } from '../settings/settings.selectors';
 import {
   setDefinitionsModal,
+  setMenuInitialState,
   toggleRightSidebar,
 } from '../menu/menu.actions';
 import { MAX_ABSTRACT_COUNT } from '../../constants';
@@ -23,6 +24,7 @@ export const load = (formData) => async (dispatch) => {
     const graphData = await api.load(formData);
     dispatch(actionCreator(dataTypes.SUCCESS_LOAD, graphData));
     dispatch(clearAbstractCount());
+    dispatch(setMenuInitialState());
     return true;
   } catch (error) {
     console.error(error);

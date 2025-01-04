@@ -15,7 +15,7 @@ import SidebarSectionHeader from './SidebarSectionHeader';
 const Relation = ({ relation }) => {
   return (
     <div className='flex w-full items-center'>
-      <p className='truncate mr-2'>{relation}</p>
+      <p className='truncate mr-2'title={relation?.length > 20 ? relation : undefined}>{relation}</p>
     </div>
   );
 };
