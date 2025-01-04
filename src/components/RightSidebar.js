@@ -14,14 +14,14 @@ export default function RightSidebar() {
   return (
     <div>
       <aside
-        id='default-sidebar'
+        id='right-sidebar'
         className={cn(
           'absolute top-0 right-0 z-40 w-96 h-screen transition-transform',
           { 'translate-x-full': !open, 'translate-x-0': open }
         )}
-        aria-label='Sidenav'
+        aria-label='Right sidenav'
       >
-        <div className='overflow-y-auto py-5 px-3 h-full bg-white border-l border-gray-200 dark:bg-gray-800 dark:border-gray-700'>
+        <div className='flex flex-col gap-10 overflow-y-auto py-5 px-3 h-full bg-white border-l border-gray-200 dark:bg-gray-800 dark:border-gray-700'>
           <Questions />
           <Constraints />
         </div>

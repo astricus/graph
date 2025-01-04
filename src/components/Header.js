@@ -11,6 +11,7 @@ import { FaUndoAlt, FaRedoAlt, FaArrowDown } from 'react-icons/fa';
 import { ActionCreators } from 'redux-undo';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+  load,
   abstract,
   exportOrigin,
   setDataInitialState,
@@ -31,7 +32,7 @@ import {
   setSettingsModal,
   setMenuInitialState,
 } from '../store/menu/menu.actions';
-import { MAX_ABSTRACT_COUNT } from '../constants';
+import { DEMO_URL, MAX_ABSTRACT_COUNT } from '../constants';
 import { useCallback } from 'react';
 // import { persistor } from '../store';
 import { setSettingsInitialState } from '../store/settings/settings.actions';
@@ -98,6 +99,12 @@ export default function Header() {
     dispatch(abstract(abstractType));
   };
 
+  const onDemoLoad = async () => {
+    const formData = new FormData();
+    formData.append('url', DEMO_URL);
+    await dispatch(load(formData));
+  };
+
   return (
     <Navbar
       fluid={true}
@@ -118,6 +125,13 @@ export default function Header() {
           <HiOutlineDownload className='mr-1 text-base' />
           Load
         </Button>
+        <Dropdown
+          label='Demo'
+        >
+          <Dropdown.Item onClick={onDemoLoad}>
+            Library
+          </Dropdown.Item>
+        </Dropdown>
         <Button
           className='mr-3 border-0'
           color='light'

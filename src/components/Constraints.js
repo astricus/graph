@@ -13,7 +13,7 @@ import Pagination from './Pagination';
 const Constraint = ({ constraint }) => {
   return (
     <div className='flex w-full items-center'>
-      <p className='mr-2 mb-2'>{constraint}</p>
+      <p className='text-sm mr-2 mb-2'>{constraint}</p>
     </div>
   );
 };

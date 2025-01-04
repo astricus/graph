@@ -44,7 +44,7 @@ const Concept = ({ node, isPinned = false, isActive = false }) => {
         )}
         onClick={togglePinNode}
       />
-      <p className='truncate mr-2'>{name}</p>
+      <p className='truncate mr-2 w-44' title={name?.length > 20 ? name : undefined}>{name}</p>
       <HiOutlineCursorClick
         className={clsx(
           'ml-auto hover:cursor-pointer hover:text-black transition-colors',

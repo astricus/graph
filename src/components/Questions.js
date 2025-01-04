@@ -1,13 +1,8 @@
 import { useMemo } from 'react';
-import { TextInput } from 'flowbite-react';
 import React from 'react';
-import { HiSearch } from 'react-icons/hi';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { selectQuestions } from '../store/data/data.selectors';
-import { selectQuestionsFilters } from '../store/menu/menu.selectors';
-import { setQuestions } from '../store/menu/menu.actions';
 import { usePagination } from '../hooks/usePagination';
-import { useFilters } from '../hooks/useFilters';
 import Pagination from './Pagination';
 
 const Question = ({ question, answer }) => {
@@ -20,20 +15,10 @@ const Question = ({ question, answer }) => {
 };
 
 export default function Questions() {
-  const dispatch = useDispatch();
   const questions = useSelector(selectQuestions);
-  const questionsFilters = useSelector(selectQuestionsFilters);
-  const { search } = questionsFilters;
-
-  const handleChangeSearch = (event) => {
-    const { value } = event.target;
-    dispatch(setQuestions({ ...questionsFilters, search: value }));
-  };
-
-  const filteredQuestions = useFilters(questions, questionsFilters);
 
   const { page, total, pageUp, pageDown, slice } = usePagination(
-    filteredQuestions,
+    questions,
     10
   );
 
@@ -48,26 +33,22 @@ export default function Questions() {
     );
   }, [slice]);
 
+  if (!questions.length) {
+    return null;
+  }
+
   return (
     <div className='flex flex-col h-full'>
       <div className='flex mb-3'>
-        <b>Questions</b>
+        <b>Exploratory questions</b>
       </div>
-      <TextInput
-        className='mb-2'
-        type='search'
-        icon={HiSearch}
-        placeholder='Quick search for question'
-        value={search}
-        onChange={handleChangeSearch}
-      />
       {questionsSlice}
-      <Pagination
+      {questions.length > 10 && <Pagination
         page={page}
         total={total}
         pageUp={pageUp}
         pageDown={pageDown}
-      />
+      />}
     </div>
   );
 }

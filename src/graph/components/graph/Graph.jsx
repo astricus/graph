@@ -382,6 +382,9 @@ export default class Graph extends React.Component {
     } else {
       if (!this.nodeClickTimer) {
         this.nodeClickTimer = setTimeout(() => {
+          // if (this.state.focusedNodeId) {
+          //   this._tick({ focusedNodeId: '', nodes: { ...this.state.nodes, [this.state.focusedNodeId]: { ...this.state.nodes[this.state.focusedNodeId], highlighted: false } } });
+          // }
           this.props.onClickNode && this.props.onClickNode(clickedNodeId, clickedNode);
           this.nodeClickTimer = null;
         }, CONST.TTL_DOUBLE_CLICK_IN_MS);
@@ -416,7 +419,7 @@ export default class Graph extends React.Component {
     const clickedNode = this.state.nodes[id];
     this.props.onMouseOverNode && this.props.onMouseOverNode(id, clickedNode);
 
-    this.state.config.nodeHighlightBehavior && this._setNodeHighlightedValue(id, true);
+    this.state.config.nodeHighlightBehavior && this.state.focusedNodeId !== id && this._setNodeHighlightedValue(id, true);
   };
 
   /**
@@ -432,7 +435,7 @@ export default class Graph extends React.Component {
     const clickedNode = this.state.nodes[id];
     this.props.onMouseOutNode && this.props.onMouseOutNode(id, clickedNode);
 
-    this.state.config.nodeHighlightBehavior && this._setNodeHighlightedValue(id, false);
+    this.state.config.nodeHighlightBehavior && this.state.focusedNodeId !== id && this._setNodeHighlightedValue(id, false);
   };
 
   /**
@@ -563,6 +566,19 @@ export default class Graph extends React.Component {
 
     const transform = newConfig.panAndZoom !== this.state.config.panAndZoom ? 1 : this.state.transform;
     const focusedNodeId = nextProps.data.focusedNodeId;
+    let nodes = this.state.nodes;
+    if (focusedNodeId && this.state.focusedNodeId) {
+      nodes = {
+        ...this.state.nodes,
+        [focusedNodeId]: { ...this.state.nodes[focusedNodeId], highlighted: true },
+        [this.state.focusedNodeId]: { ...this.state.nodes[this.state.focusedNodeId], highlighted: false },
+      };
+    } else if (focusedNodeId) {
+      nodes = {
+        ...this.state.nodes,
+        [focusedNodeId]: { ...this.state.nodes[focusedNodeId], highlighted: true },
+      };
+    }
     const d3FocusedNode = this.state.d3Nodes.find(node => `${node.id}` === `${focusedNodeId}`);
     const containerElId = `${this.state.id}-${CONST.GRAPH_WRAPPER_ID}`;
     const focusTransformation =
@@ -577,6 +593,7 @@ export default class Graph extends React.Component {
 
     this.setState({
       ...state,
+      nodes,
       config,
       configUpdated,
       d3ConfigUpdated,
@@ -656,7 +673,7 @@ export default class Graph extends React.Component {
         onMouseOutLink: this.onMouseOutLink,
       },
       this.state.config,
-      this.state.highlightedNode,
+      this.state.highlightedNode || this.state.focusedNodeId,
       this.state.highlightedLink,
       this.state.transform
     );
