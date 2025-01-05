@@ -125,13 +125,11 @@ export default function Header() {
           <HiOutlineDownload className='mr-1 text-base' />
           Load
         </Button>
-        <Dropdown
-          label='Demo'
-        >
-          <Dropdown.Item onClick={onDemoLoad}>
-            Library
-          </Dropdown.Item>
-        </Dropdown>
+        <div className='mr-3'>
+          <Dropdown label='Demo'>
+            <Dropdown.Item onClick={onDemoLoad}>Library</Dropdown.Item>
+          </Dropdown>
+        </div>
         <Button
           className='mr-3 border-0'
           color='light'

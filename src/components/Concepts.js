@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import React from 'react';
 import {
   HiSearch,
-  HiOutlinePaperClip,
+  // HiOutlinePaperClip,
   HiOutlineCursorClick,
 } from 'react-icons/hi';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,7 +15,7 @@ import {
 } from '../store/data/data.selectors';
 import {
   clickNode,
-  /* setActiveNodes, */ setPinnedNodes,
+  /* setActiveNodes, setPinnedNodes */
 } from '../store/data/data.actions';
 import { selectConcepts } from '../store/menu/menu.selectors';
 import { setConcepts } from '../store/menu/menu.actions';
@@ -23,28 +23,31 @@ import { usePagination } from '../hooks/usePagination';
 import { useFilters } from '../hooks/useFilters';
 import Pagination from './Pagination';
 import SidebarSectionHeader from './SidebarSectionHeader';
-import { useCallback } from 'react';
+// import { useCallback } from 'react';
+import { selectShowStereotype } from '../store/settings/settings.selectors';
 
 const Concept = ({ node, isPinned = false, isActive = false }) => {
-  const { id, name } = node;
+  const { name, fullName } = node;
+  const showStereotype = useSelector(selectShowStereotype);
+  const displayName = showStereotype ? fullName : name
   const dispatch = useDispatch();
-  const togglePinNode = useCallback(() => {
-    dispatch(setPinnedNodes(id));
-  }, [dispatch, id]);
+  // const togglePinNode = useCallback(() => {
+  //   dispatch(setPinnedNodes(id));
+  // }, [dispatch, id]);
   const toggleActiveNode = () => {
     // dispatch(setActiveNodes(id));
     dispatch(clickNode(node));
   };
   return (
     <div className='flex w-full items-center'>
-      <HiOutlinePaperClip
+      {/* <HiOutlinePaperClip
         className={clsx(
           'mr-2 hover:cursor-pointer hover:text-black transition-colors',
           { 'text-gray-300': !isPinned }
         )}
         onClick={togglePinNode}
-      />
-      <p className='truncate mr-2 w-44' title={name?.length > 20 ? name : undefined}>{name}</p>
+      /> */}
+      <p className='truncate mr-2 w-48' title={displayName?.length > 20 ? displayName : undefined}>{displayName}</p>
       <HiOutlineCursorClick
         className={clsx(
           'ml-auto hover:cursor-pointer hover:text-black transition-colors',
@@ -74,8 +77,9 @@ export default function Concepts() {
     const { value } = event.target;
     dispatch(setConcepts({ ...concepts, search: value }));
   };
-
-  const filteredNodes = useFilters(nodes, concepts);
+  const showStereotype = useSelector(selectShowStereotype);
+  const searchKey = showStereotype ? 'fullName' : 'name';
+  const filteredNodes = useFilters(nodes, concepts, searchKey);
 
   const pinnedNodes = useSelector(selectPinnedNodesMap);
   const activeNodes = useSelector(selectActiveNodesMap);

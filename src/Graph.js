@@ -21,7 +21,7 @@ import {
 import { connect } from 'react-redux';
 import { defaultConfig } from './graph.config';
 import ContextMenu from './components/ContextMenu';
-import { selectZoom } from './store/settings/settings.selectors';
+import { selectShowStereotype, selectZoom } from './store/settings/settings.selectors';
 import { setZoom } from './store/settings/settings.actions';
 import { clickNode, explore } from './store/data/data.actions';
 
@@ -99,6 +99,18 @@ class Sandbox extends React.Component {
     //   const graphEl = document.querySelector('#graph-graph-wrapper');
     //   graphEl.dispatchEvent(wheelEvt);
     // }
+    if (prevProps.showStereotype !== this.props.showStereotype) {
+      this.setState(state => ({
+        ...state,
+        config: {
+          ...state.config,
+          node: {
+            ...state.config.node,
+            labelProperty: this.props.showStereotype ? 'fullName' : 'name',
+          },
+        }
+      }))
+    }
     if (!graphData && this.state.data.nodes.length > 0) {
       this.setState((state) => ({
         ...state,
@@ -546,10 +558,6 @@ class Sandbox extends React.Component {
     }
   };
 
-  // componentDidMount() {
-  //   toast.configure();
-  // }
-
   renderNodeValues = () => {
     const { clicked } = this.state;
     // console.log(clicked);
@@ -651,6 +659,7 @@ const mapStateToProps = (state) => ({
   clickedNode: state.data.present.clickedNode,
   openLeft: state.menu.isLeftSidebarOpen,
   openRight: state.menu.isRightSidebarOpen,
+  showStereotype: selectShowStereotype(state),
 });
 
 const mapDispatchToProps = {

@@ -2,6 +2,7 @@ import dataTypes from './data.types';
 import { actionCreator } from '../utils';
 import * as api from './data.api';
 import { saveAs } from 'file-saver';
+import { toast } from 'react-toastify';
 import {
   selectAbstractCount,
   selectActiveNodesMap,
@@ -106,7 +107,12 @@ export const expand = (nodeId) => async (dispatch, getState) => {
     dispatch(actionCreator(dataTypes.REQUEST_EXPAND));
     const origin = selectOrigin(getState());
     const limit = 5; // todo: make this configurable
-    const graphData = await api.expand({ origin, node: nodeId, limit });
+    const graphData = await toast.promise(api.expand({ origin, node: nodeId, limit }), {
+      pending: 'Expanding the graph, please wait...',
+      success: 'Graph expanded successfully!',
+      error: 'Failed to expand the graph!',
+    });
+    // const graphData = await api.expand({ origin, node: nodeId, limit });
     dispatch(actionCreator(dataTypes.SUCCESS_EXPAND, graphData));
     return true;
   } catch (error) {
@@ -190,7 +196,7 @@ export const exportOrigin = () => (dispatch, getState) => {
     const blob = new Blob([JSON.stringify(origin)], {
       type: 'text/plain;charset=utf-8',
     });
-    saveAs(blob, 'data.json');
+    saveAs(blob, 'exported_origin.json');
     dispatch(actionCreator(dataTypes.EXPORT_ORIGIN));
   }
 };
